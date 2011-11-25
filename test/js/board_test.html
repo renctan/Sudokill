@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Sudokill Unit Tests - drecco.sudokill.Board</title>
+<script src="../../lib/goog/base.js"></script>
+<script src="../../sudokill-dep.js"></script>
+<script>
+  goog.require('goog.testing.jsunit');
+  goog.require('drecco.sudokill.Board');
+</script>
+</head>
+
+<body>
+<script>
+var board = null;
+
+var setUp = function() {
+  board = new drecco.sudokill.Board();
+};
+
+var testSimpleSet = function(){
+  assert(board.set(1, 1, 3));
+  assertEquals(3, board.get(1, 1));
+};
+
+var testBadSet = function(){
+  assertFalse(board.set(9, 1, 3));
+};
+
+</script>
+</body>
+</html>
+
