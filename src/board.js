@@ -184,3 +184,63 @@ drecco.sudokill.Board.prototype.getValidNumbers = function(x, y) {
   return numbers;
 };
 
+/**
+ * Checks if the move that is about to be made is valid. This method assumes that
+ * the current board state is valid. 
+ * 
+ * @param {number} x
+ * @param {number} y
+ * @param {number} n
+ * @param {boolean?} checkAlignment Checks to see if the move aligns with the
+ *   last move horizontally or vertically (except for cases when the horizontal
+ *   and vertical cells are completely filled. Defaults to false.
+ * 
+ * @return {boolean} true if valid.
+ */
+drecco.sudokill.Board.prototype.isValid = function(x, y, n, checkAlignment) {
+  var doCheckAlign = checkAlignment || false;
+  var isValid = false;
+  var lastMove;
+
+  if (n != 0 && this.get(x, y) == 0) {
+    if (doCheckAlign) {
+      lastMove = this.getLastMove();
+      
+      if (lastMove != null && !this.rowColFilled(lastMove.getX(), lastMove.getY()) &&
+          x != lastMove.getX() && y != lastMove.getY()) {
+        return false;
+      }
+    }
+    
+    isValid = this.getValidNumbers(x, y).contains(n);
+  }
+
+  return isValid;
+};
+
+/**
+ * @param {number} x
+ * @param {number} y
+ * 
+ * @return {boolean} true if the row and column of the given cell is already filled with
+ *   numbers.
+ */
+drecco.sudokill.Board.prototype.rowColFilled = function(x, y) {
+  var i = BOARD_LENGTH;
+  var j = BOARD_WIDTH;
+
+  for (; i--; ) {
+    if (this.get(i, y) == 0) {
+      return false;
+    }
+  }
+  
+  for (; j--; ) {
+    if (this.get(x, j) == 0) {
+      return false;
+    }
+  }
+  
+  return true;
+};
+
