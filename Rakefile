@@ -2,8 +2,11 @@
 require "rubygems"
 require "rake/testtask"
 
-CLOSURE_ROOT_PATH = "~/closure-library/"
-CLOSURE_DEP_SCRIPT_PATH = CLOSURE_ROOT_PATH + "closure/bin/build/depswriter.py"
+CLOSURE_ROOT_PATH = "/usr/lib/closure-library/" # Modify this according to machine setup
+CLOSURE_TOOLS_PATH = CLOSURE_ROOT_PATH + "closure/bin/build/"
+CLOSURE_DEP_SCRIPT_PATH = CLOSURE_TOOLS_PATH + "depswriter.py"
+CLOSURE_BUILDER_PATH = CLOSURE_TOOLS_PATH + "closurebuilder.py"
+CLOSURE_LIB_PATH = "lib/goog/base.js"
 
 TEST_PATH = "test/js"
 SRC_PATH = "src/"
@@ -19,13 +22,10 @@ task :build do
   system("python #{CLOSURE_DEP_SCRIPT_PATH} --root_with_prefix=\"src #{SRC_DEPS_PATH}\" " +
          "> #{APP_DEP_FILE}")
 
-  js_files = %w[move board]
-  js_opt_arr = js_files.map { |file| "--js=#{SRC_PATH}/#{file}.js" }
-  js_opt_str = js_opt_arr.join(" ")
-
-  system("java -jar compiler.jar #{js_opt_str} --js_output_file=#{APP_FILE}")
+  system("python #{CLOSURE_BUILDER_PATH} --root=#{CLOSURE_ROOT_PATH} --root=src "+
+         "--namespace=drecco.sudokill.Board --output_mode=compiled " +
+         "--compiler_jar=compiler.jar > #{APP_FILE}")
 end
-
 
 task :default do
   system("rake -T")

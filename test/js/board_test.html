@@ -15,18 +15,102 @@
 <script>
 var board = null;
 
-var setUp = function() {
+function setUp() {
   board = new drecco.sudokill.Board();
 };
 
-var testSimpleSet = function(){
+function testSimpleSet() {
   assert(board.set(1, 1, 3));
   assertEquals(3, board.get(1, 1));
 };
 
-var testBadSet = function(){
+function testBadSet() {
   assertFalse(board.set(9, 1, 3));
 };
+
+function testSimpleColumnValiditySet() {
+  board.set(0, 0, 1);
+  board.set(0, 2, 5);
+  board.set(0, 5, 6);
+  board.set(0, 8, 9);
+    
+  var validNumbers = board.getValidNumbers(0, 4);
+    
+  assertEquals(5, validNumbers.getCount());
+  assertTrue(validNumbers.contains(2));
+  assertTrue(validNumbers.contains(3));
+  assertTrue(validNumbers.contains(4));
+  assertTrue(validNumbers.contains(7));
+  assertTrue(validNumbers.contains(8));
+}
+  
+function testSimpleRowValiditySet() {
+  board.set(4, 3, 8);
+  board.set(8, 3, 3);
+  board.set(2, 3, 6);
+    
+  validNumbers = board.getValidNumbers(0, 3);
+    
+  assertEquals(6, validNumbers.getCount());
+  assertTrue(validNumbers.contains(1));
+  assertTrue(validNumbers.contains(2));
+  assertTrue(validNumbers.contains(4));
+  assertTrue(validNumbers.contains(5));
+  assertTrue(validNumbers.contains(7));
+  assertTrue(validNumbers.contains(9));
+}
+  
+function testSimpleSectorValiditySet() {
+  board.set(3, 7, 8);
+  board.set(5, 8, 3);
+  board.set(3, 6, 6);
+  board.set(4, 6, 2);
+  board.set(4, 7, 1);
+  board.set(5, 7, 7);
+  
+  var validNumbers = board.getValidNumbers(3, 8);
+    
+  assertEquals(3, validNumbers.getCount());
+  assertTrue(validNumbers.contains(4));
+  assertTrue(validNumbers.contains(5));
+  assertTrue(validNumbers.contains(9));
+}
+  
+function testMixedValiditySet() {
+  board.set(3, 3, 1);
+  board.set(4, 4, 3);
+  board.set(6, 3, 2);
+  board.set(4, 5, 9);
+  board.set(5, 8, 5);
+    
+  var validNumbers = board.getValidNumbers(5, 3);
+    
+  assertEquals(4, validNumbers.getCount());
+  assertTrue(validNumbers.contains(4));
+  assertTrue(validNumbers.contains(6));
+  assertTrue(validNumbers.contains(7));
+  assertTrue(validNumbers.contains(8));
+}
+  
+function testMixedValiditySetWithNoise() {
+  board.set(3, 3, 1);
+  board.set(0, 2, 4); // noise
+  board.set(7, 2, 6); // noise
+  board.set(4, 4, 3);
+  board.set(8, 8, 3); // noise
+  board.set(6, 3, 2);
+  board.set(4, 5, 9);
+  board.set(1, 7, 2); // noise
+  board.set(5, 8, 5);
+    
+  var validNumbers = board.getValidNumbers(5, 3);
+    
+  assertEquals(4, validNumbers.getCount());
+  assertTrue(validNumbers.contains(4));
+  assertTrue(validNumbers.contains(6));
+  assertTrue(validNumbers.contains(7));
+  assertTrue(validNumbers.contains(8));
+}
 
 </script>
 </body>
