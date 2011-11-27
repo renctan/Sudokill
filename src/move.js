@@ -1,5 +1,7 @@
 goog.provide('drecco.sudokill.Move');
 
+goog.require('goog.functions');
+
 /**
  * Creates an immutable Move object.
  * 
@@ -11,9 +13,9 @@ goog.provide('drecco.sudokill.Move');
  */
 drecco.sudokill.Move = function(x, y, n) {
   return {
-    getX: function() { return x; },
-    getY: function() { return y; },
-    getN: function() { return n; }
+    getX: goog.functions.constant(x),
+    getY: goog.functions.constant(y),
+    getN: goog.functions.constant(n)
   };
 };
 
