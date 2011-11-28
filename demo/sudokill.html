@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sudokill Demo</title>
+  <script src="../lib/goog/base.js"></script>
+  <script src="../sudokill-dep.js"></script>
+  <script src="../src/sudokill_ui.js"></script>
+<!--  <script src="../sudokill.js"></script> -->
+  <link rel="stylesheet" href="../lib/goog/css/palette.css">
+
+  <style>
+    #cp_text, #ccp_text {
+      font: medium monospace;
+    }
+
+    .fakelink {
+      text-decoration: underline;
+      color: blue;
+      cursor: pointer;
+    }
+
+    /* Demo styles */
+    .simple-palette .goog-palette-active {
+      border-color: #edf;
+    }
+
+    .simple-palette .goog-palette-table {
+      border: 1px solid #888;
+      border-collapse: separate;
+    }
+
+    .simple-palette .goog-palette-cell {
+      height: 16px;
+      width: 16px;
+      margin: 0;
+      border: 0;
+      padding: 1px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .simple-palette .goog-palette-cell-hover {
+      border: 1px solid #cc0;
+      padding: 0;
+      background-color: #ff0 !important;
+    }
+
+    .simple-palette .goog-palette-cell-selected {
+      border: 1px solid #008 !important;
+      padding: 0;
+      color: #00f;
+      font-weight: bold;
+    }
+
+    .goog-palette-colorswatch {
+      position: relative;
+      height: 18px;
+      width: 18px;
+      font-size: x-small;
+    }
+
+    .goog-palette-cell-hover .goog-palette-colorswatch {
+      height: 16px;
+      width: 16px;
+      border: 1px solid #FFF;
+    }
+
+    .goog-palette-cell-selected .goog-palette-colorswatch {
+      height: 16px;
+      width: 16px;
+      border: 1px solid #333;
+      color: #fff;
+      font-weight: bold;
+      background-image: url(../images/color-swatch-tick.gif);
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+
+    .goog-palette-customcolor {
+      position: relative;
+      height: 16px;
+      width: 16px;
+      font-size: x-small;
+      background-color: #FAFAFA;
+      color: #666;
+      border: 1px solid #EEE;
+    }
+
+    .goog-palette-cell-hover .goog-palette-customcolor {
+      background-color: #FEE;
+      border: 1px solid #F66;
+      color: #F66;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="board"></div>
+
+  <!-- For debug -->
+  <fieldset class="goog-debug-panel">
+    <legend>Log</legend>
+    <div id="log"></div>
+  </fieldset>
+
+  <script>
+    var ui = new drecco.sudokill.UI();
+    ui.render(goog.dom.getElement('board'));
+  </script>
+</body>
+
+</html>

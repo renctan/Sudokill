@@ -23,7 +23,7 @@ task :build do
          "> #{APP_DEP_FILE}")
 
   system("python #{CLOSURE_BUILDER_PATH} --root=#{CLOSURE_ROOT_PATH} --root=src "+
-         "--namespace=drecco.sudokill.Board --output_mode=compiled " +
+         "--namespace=drecco.sudokill.UI --output_mode=compiled " +
          "--compiler_jar=compiler.jar > #{APP_FILE}")
 end
 
