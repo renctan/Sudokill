@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Sudokill Unit Tests - drecco.sudokill.BoardFactory</title>
+<script src="../../lib/goog/base.js"></script>
+<script src="../../sudokill-dep.js"></script>
+<script>
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.structs.Set');
+  goog.require('drecco.sudokill.Board');
+  goog.require('drecco.sudokill.BoardFactory');
+</script>
+</head>
+
+<body>
+<script>
+var board = null;
+
+function checkColumn(board) {
+  var numbers;
+  var x, y, n;
+  
+  for (x = 0; x < 9; x++) {
+    numbers = drecco.sudokill.Board._validNumbers();
+
+    for (y = 0; y < 9; y++) {
+      n = board.get(x, y);
+
+      if (n != 0) {
+        assertTrue(numbers.contains(n));
+        numbers.remove(n);
+      }
+    }
+  }
+};
+
+function checkRow(board) {
+  var numbers;
+  var x, y, n;
+  
+  for (y = 0; y < 9; y++) {
+    numbers = drecco.sudokill.Board._validNumbers();
+
+    for (x = 0; x < 9; x++) {
+      n = board.get(x, y);
+
+      if (n != 0) {
+        assertTrue(numbers.contains(n));
+        numbers.remove(n);
+      }
+    }
+  }
+};
+
+function checkSector(board) {
+  var numbers;
+  var sectorX, sectorY, sectorXEnd, sectorYEnd;
+  var x, y, n;
+  
+  for (sectorX = 0, sectorY = 0; sectorX < 9; sectorX +=3, sectorY +=3) {
+    sectorXEnd = sectorX + 3;
+    sectorYEnd = sectorY + 3;
+    numbers = drecco.sudokill.Board._validNumbers();
+
+    for (y = sectorY; y < sectorYEnd; y++) {
+      for (x = sectorX; x < sectorXEnd; x++) {
+        n = board.get(x, y);
+
+        if (n != 0) {
+          assertTrue(numbers.contains(n));
+          numbers.remove(n);
+        }
+      }
+    }
+  }
+};
+
+function testCreatesValidBoard() {
+  var size = 0;
+  var board;
+
+  for (; size <= 81; size++) {
+    board = drecco.sudokill.BoardFactory.create(size);
+    checkRow(board);
+    checkColumn(board);
+    checkSector(board);
+  }
+}
+
+</script>
+</body>
+</html>
+

@@ -1,7 +1,7 @@
 goog.provide('drecco.sudokill.UI');
 
 goog.require('goog.ui.Palette');
-goog.require('drecco.sudokill.Board');
+goog.require('drecco.sudokill.BoardFactory');
 
 //TODO: rm DEBUG
     goog.require('goog.debug.DivConsole');
@@ -10,15 +10,26 @@ goog.require('drecco.sudokill.Board');
 
 //END DEBUG
 
+/**
+ * @private
+ * @constant
+ */
 var WIDTH_SIZE = 9;
+
+/**
+ * @private
+ * @constant
+ */
+var LENGTH_SIZE = 9;
 
 /**
  * Creates a UI container for Sudokill.
  * 
+ * @param {number} filledCell
  * @constructor
  */
-drecco.sudokill.UI = function() {
-  this._board = new drecco.sudokill.Board();
+drecco.sudokill.UI = function(filledCell) {
+  this._board = new drecco.sudokill.BoardFactory.create(filledCell);
 
 //TODO: rm DEBUG
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
@@ -35,16 +46,22 @@ drecco.sudokill.UI = function() {
  */
 drecco.sudokill.UI.prototype.render = function(node) {
   var items = [];
-  var x = 81;
+  var x, y;
+  var cell;
+  var cellDisp = '';
   var boardPalette;
   var self = this;
 
-  for (; x--; ) {
-    items.push(goog.dom.createTextNode(''));
+  for (x = 0; x < WIDTH_SIZE; x++) {
+    for (y = 0; y < LENGTH_SIZE; y++) {
+      cell = this._board.get(x, y);
+      cellDisp = (cell == 0)? '' : cell;
+      items.push(goog.dom.createTextNode(cellDisp));
+    }
   }
 
   boardPalette = new goog.ui.Palette(items);
-  boardPalette.setSize();
+  boardPalette.setSize(WIDTH_SIZE);
 
   boardPalette.render(node);
   goog.dom.classes.add(boardPalette.getElement(), 'simple-palette');

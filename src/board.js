@@ -93,7 +93,7 @@ drecco.sudokill.Board.prototype.getLastMove = function() {
  * @return {goog.structs.Set.<number>} the set of all valid numbers for Sudoku.
  * @private
  */
-drecco.sudokill.Board.prototype._validNumbers = function() {
+drecco.sudokill.Board._validNumbers = function() {
   var numbers = new goog.structs.Set();
   var x = 1;
 
@@ -111,7 +111,7 @@ drecco.sudokill.Board.prototype._validNumbers = function() {
  * @private
  */
 drecco.sudokill.Board.prototype._validNumbersForRow = function(row) {
-  var numbers = this._validNumbers();
+  var numbers = drecco.sudokill.Board._validNumbers();
   var x = 0;
 
   for (; x < BOARD_WIDTH; x++) {
@@ -127,7 +127,7 @@ drecco.sudokill.Board.prototype._validNumbersForRow = function(row) {
  *   column without violating the Sudoku rule.
  */
 drecco.sudokill.Board.prototype._validNumbersForColumn = function(column) {
-  var numbers = this._validNumbers();
+  var numbers = drecco.sudokill.Board._validNumbers();
   var y = 0;
 
   for (; y < BOARD_LENGTH; y++) {
@@ -146,7 +146,7 @@ drecco.sudokill.Board.prototype._validNumbersForColumn = function(column) {
  * @private
  */
 drecco.sudokill.Board.prototype._validNumbersForSector = function(x, y) {
-  var numbers = this._validNumbers();
+  var numbers = drecco.sudokill.Board._validNumbers();
   
   var startX = Math.floor(x / 3) * 3;
   var endX = startX + 3;
