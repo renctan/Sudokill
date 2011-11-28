@@ -153,6 +153,12 @@ function testLastMoveFullCheck() {
   assertTrue(board.isValid(8, 6, 2, true));
 }
 
+function testNotAlignedAfterForgetLastMove() {
+  board.set(4, 3, 9);
+  board.forgetLastMove();
+  assertTrue(board.isValid(8, 0, 7, true));
+}
+
 </script>
 </body>
 </html>

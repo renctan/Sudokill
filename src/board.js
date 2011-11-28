@@ -244,3 +244,10 @@ drecco.sudokill.Board.prototype.rowColFilled = function(x, y) {
   return true;
 };
 
+/**
+ * Clears the last move.
+ */
+drecco.sudokill.Board.prototype.forgetLastMove = function() {
+  this._lastMove = null;
+};
+
