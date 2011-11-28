@@ -1,6 +1,7 @@
 goog.provide('drecco.sudokill.UI');
 
 goog.require('goog.ui.Palette');
+goog.require('goog.ui.Prompt');
 goog.require('drecco.sudokill.BoardFactory');
 
 //TODO: rm DEBUG
@@ -25,11 +26,17 @@ var LENGTH_SIZE = 9;
 /**
  * Creates a UI container for Sudokill.
  * 
- * @param {number} filledCell
+ * @param {number} filledCell The number of cells to fill on the initial board.
+ * @param {drecco.sudokill.PlayerListUI} playerList The list of players.
+ * @param {Node} statusBar The a DOM node that is used for displaying status messages.
+ * 
  * @constructor
  */
-drecco.sudokill.UI = function(filledCell) {
+drecco.sudokill.UI = function(filledCell, playerList, statusBar) {
   this._board = new drecco.sudokill.BoardFactory.create(filledCell);
+  this._isGameOver = false;
+  this._players = playerList;
+  this._statusBar = statusBar;
 
 //TODO: rm DEBUG
     goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
@@ -52,8 +59,8 @@ drecco.sudokill.UI.prototype.render = function(node) {
   var boardPalette;
   var self = this;
 
-  for (x = 0; x < WIDTH_SIZE; x++) {
-    for (y = 0; y < LENGTH_SIZE; y++) {
+  for (y = 0; y < LENGTH_SIZE; y++) {
+    for (x = 0; x < WIDTH_SIZE; x++) {
       cell = this._board.get(x, y);
       cellDisp = (cell == 0)? '' : cell;
       items.push(goog.dom.createTextNode(cellDisp));
@@ -80,10 +87,34 @@ drecco.sudokill.UI.prototype._selectCell = function(palette) {
   var idx = palette.getHighlightedIndex();
   var x = drecco.sudokill.UI._getX(idx);
   var y = drecco.sudokill.UI._getY(idx);
+  var self = this;
+  var n;
 
-  // TODO: implement
   this.logger.info("Selected: " + x + ", " + y);
-  goog.dom.setTextContent(palette.getSelectedItem(), "X");
+  if (!this._isGameOver && this._board.get(x, y) == 0) {
+    var handler = function(response) {
+      if (response != null) {
+        n = parseInt(response);
+
+        if (!self._board.isValid(x, y, n)) {
+          self._gameOver(x, y, n);
+        }
+        else { 
+          self._board.set(x, y, n);
+          goog.dom.setTextContent(palette.getSelectedItem(), n); // Update display
+          self._players.next();
+        }
+      }
+    };
+
+    var prompt = new goog.ui.Prompt('', 'Set the value.', handler);
+    prompt.setValidationFunction(function(input) {
+      var num = parseInt(input);
+      return (num >= 1 && num <= 9);
+    });
+
+    prompt.setVisible(true);
+  }
 };
 
 /**
@@ -100,5 +131,15 @@ drecco.sudokill.UI._getX = function(num) {
  */
 drecco.sudokill.UI._getY = function(num) {
   return Math.floor(num / WIDTH_SIZE);
+};
+
+/**
+ * Ends the game and updates the status bar with a game over message.
+ * @private
+ */
+drecco.sudokill.UI._gameOver = function(x, y, n) {
+  this._isGameOver = true;
+  goog.dom.setTextContent(this._statusBar, "Game Over: Illegal move by " +
+    this._players.getCurrentPlayer() + " with " + n + " on (" + x + ", " + y);
 };
 
