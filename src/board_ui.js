@@ -1,4 +1,4 @@
-goog.provide('drecco.sudokill.UI');
+goog.provide('drecco.sudokill.BoardUI');
 
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.Prompt');
@@ -32,7 +32,7 @@ var LENGTH_SIZE = 9;
  * 
  * @constructor
  */
-drecco.sudokill.UI = function(filledCell, playerList, statusBar) {
+drecco.sudokill.BoardUI = function(filledCell, playerList, statusBar) {
   this._board = new drecco.sudokill.BoardFactory.create(filledCell);
   this._isGameOver = false;
   this._players = playerList;
@@ -51,7 +51,7 @@ drecco.sudokill.UI = function(filledCell, playerList, statusBar) {
  * 
  * @param {Node} node
  */
-drecco.sudokill.UI.prototype.render = function(node) {
+drecco.sudokill.BoardUI.prototype.render = function(node) {
   var items = [];
   var x, y;
   var cell;
@@ -83,10 +83,10 @@ drecco.sudokill.UI.prototype.render = function(node) {
  * @param {goog.ui.Palette} palette The palette UI that represents the board
  * @private
  */
-drecco.sudokill.UI.prototype._selectCell = function(palette) {
+drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
   var idx = palette.getHighlightedIndex();
-  var x = drecco.sudokill.UI._getX(idx);
-  var y = drecco.sudokill.UI._getY(idx);
+  var x = drecco.sudokill.BoardUI._getX(idx);
+  var y = drecco.sudokill.BoardUI._getY(idx);
   var self = this;
   var n;
 
@@ -121,7 +121,7 @@ drecco.sudokill.UI.prototype._selectCell = function(palette) {
  * @return {number} the x component given the 1D index.
  * @private
  */
-drecco.sudokill.UI._getX = function(num) {
+drecco.sudokill.BoardUI._getX = function(num) {
   return num % WIDTH_SIZE;
 };
 
@@ -129,7 +129,7 @@ drecco.sudokill.UI._getX = function(num) {
  * @return {number} the y component given the 1D index.
  * @private
  */
-drecco.sudokill.UI._getY = function(num) {
+drecco.sudokill.BoardUI._getY = function(num) {
   return Math.floor(num / WIDTH_SIZE);
 };
 
@@ -137,7 +137,7 @@ drecco.sudokill.UI._getY = function(num) {
  * Ends the game and updates the status bar with a game over message.
  * @private
  */
-drecco.sudokill.UI._gameOver = function(x, y, n) {
+drecco.sudokill.BoardUI._gameOver = function(x, y, n) {
   this._isGameOver = true;
   goog.dom.setTextContent(this._statusBar, "Game Over: Illegal move by " +
     this._players.getCurrentPlayer() + " with " + n + " on (" + x + ", " + y);

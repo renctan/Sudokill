@@ -4,7 +4,7 @@
   <title>Sudokill Demo</title>
   <script src="../lib/goog/base.js"></script>
   <script src="../sudokill-dep.js"></script>
-  <script src="../src/sudokill_ui.js"></script>
+  <script src="../src/main_ui.js"></script>
 <!--  <script src="../sudokill.js"></script> -->
   <link rel="stylesheet" href="../lib/goog/css/palette.css">
 
@@ -154,7 +154,7 @@
   </fieldset>
 
   <script>
-    var ui = new drecco.sudokill.UI(15);
+    var ui = new drecco.sudokill.BoardUI(15);
     ui.render(goog.dom.getElement('board'));
   </script>
 </body>
