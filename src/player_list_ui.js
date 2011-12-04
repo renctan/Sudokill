@@ -32,11 +32,11 @@ drecco.sudokill.PlayerListUI = function(node) {
   this._addPlayerBtn = new goog.ui.Button('Add Player',
     goog.ui.FlatButtonRenderer.getInstance());
 
-  var playerTableRowDom = goog.dom.createDom('tr', { 'class': 'player-table-row' });
+  var playerTableBodyDom = goog.dom.createDom('tbody', {});
   var playerTableDom = goog.dom.createDom('table', { 'class': 'player-table' },
-    playerListDom, goog.dom.createDom('tbody', {}, playerTableRowDom ));
+    playerListDom, playerTableBodyDom);
 
-  var fullGUIDom = goog.dom.createDom('div', { 'class': 'player-list' }, addPlayerInDom,
+  var fullGUIDom = goog.dom.createDom('div', { 'id': 'player-list' }, addPlayerInDom,
     addPlayerDom, playerTableDom);
 
   goog.dom.appendChild(node, fullGUIDom);
@@ -44,12 +44,15 @@ drecco.sudokill.PlayerListUI = function(node) {
   var addPlayerHandler = function(e) {
     var input = addPlayerInput;
     var name = input.getValue();
-    var newPlayerDom = goog.dom.createDom('td', { 'class': 'player-list-entry' });
-    goog.dom.setTextContent(newPlayerDom, name);
+
+    var newPlayerColDom = goog.dom.createDom('td', { 'class': 'player-list-table-col' });
+    var newPlayerRowDom = goog.dom.createDom('tr', { 'class': 'player-list-table-row' },
+      newPlayerColDom);
+    goog.dom.setTextContent(newPlayerColDom, name);
 
     if (!goog.string.isEmptySafe(name)) {
       self._players.push(new drecco.sudokill.Player(name, true));
-      goog.dom.appendChild(playerTableRowDom, newPlayerDom);
+      goog.dom.appendChild(playerTableBodyDom, newPlayerRowDom);
       input.clear();
     }
   };
