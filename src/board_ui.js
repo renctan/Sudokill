@@ -151,3 +151,26 @@ drecco.sudokill.BoardUI.prototype.isGameOver = function() {
   return this._isGameOver;
 };
 
+/**
+ * Creates an empty board.
+ * 
+ * @param {Element} node The node to attach the board.
+ */
+drecco.sudokill.BoardUI.renderEmptyBoard = function(node) {
+  var x, y;
+  var boardPalette;
+  var items = [];
+  
+  for (y = 0; y < LENGTH_SIZE; y++) {
+    for (x = 0; x < WIDTH_SIZE; x++) {
+      items.push(goog.dom.createTextNode(''));
+    }
+  }
+
+  boardPalette = new goog.ui.Palette(items);
+  boardPalette.setSize(WIDTH_SIZE);
+
+  boardPalette.render(node);
+  goog.dom.classes.add(boardPalette.getElement(), 'simple-palette');
+};
+
