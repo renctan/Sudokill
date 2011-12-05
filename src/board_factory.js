@@ -83,6 +83,9 @@ drecco.sudokill.BoardFactory.create = function(filledCells) {
     newBoard.set(move.getX(), move.getY(), move.getN());
   }
 
+  newBoard.forgetLastMove();
+  newBoard.clearSteps();
+
   return newBoard;
 };
 

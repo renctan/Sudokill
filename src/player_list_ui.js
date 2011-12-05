@@ -104,8 +104,39 @@ drecco.sudokill.PlayerListUI.prototype.disable = function() {
 /**
  * Unfreezes the UI, allowing the user to add more new players.
  */
-drecco.sudokill.PlayerListUI.prototype.disable = function() {
+drecco.sudokill.PlayerListUI.prototype.enable = function() {
   this._addPlayerBtn.setEnabled(true);
 };
 
+/**
+ * @return {number} the number of players.
+ */
+drecco.sudokill.PlayerListUI.prototype.playerCount = function() {
+  return this._players.length;
+};
+
+/**
+ * @return {Array.<string>} an array of all players except the current player.
+ */
+drecco.sudokill.PlayerListUI.prototype.getAllExceptCurrent = function() {
+  var players = [];
+  var size = this._players.length;
+  var currIdx = this._currIdx + 1;
+
+  if (currIdx >= size) {
+    currIdx = currIdx % size;
+  }
+
+  if (size > 1) {
+    while (currIdx != this._currIdx) {
+      players.push(this._players[currIdx++].name());
+
+      if (currIdx >= size) {
+        currIdx = currIdx % size;
+      }
+    }
+  }
+  
+  return players;
+};
 

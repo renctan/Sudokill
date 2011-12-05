@@ -36,6 +36,7 @@ drecco.sudokill.Board = function() {
   }
 
   this._lastMove = null;
+  this._steps = 0;
 };
 
 /**
@@ -65,6 +66,7 @@ drecco.sudokill.Board.prototype.set = function(x, y, n) {
   else {
     this._lastMove = new drecco.sudokill.Move(x, y, n);
     this._map[this._calcOffset(x, y)] = n;
+    this._steps++;
   }
 
   return success;
@@ -249,5 +251,19 @@ drecco.sudokill.Board.prototype.rowColFilled = function(x, y) {
  */
 drecco.sudokill.Board.prototype.forgetLastMove = function() {
   this._lastMove = null;
+};
+
+/**
+ * Clears the internal counter for the number of steps.
+ */
+drecco.sudokill.Board.prototype.clearSteps = function() {
+  this._steps = 0;
+};
+
+/**
+ * @return {number} the number of steps done so far in this game.
+ */
+drecco.sudokill.Board.prototype.getSteps = function() {
+  return this._steps;
 };
 

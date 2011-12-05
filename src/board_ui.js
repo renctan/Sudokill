@@ -96,12 +96,13 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
       if (response != null) {
         n = parseInt(response);
 
+        self._board.set(x, y, n);
+        goog.dom.setTextContent(palette.getSelectedItem(), n); // Update display
+
         if (!self._board.isValid(x, y, n)) {
           self._gameOver(x, y, n);
         }
         else { 
-          self._board.set(x, y, n);
-          goog.dom.setTextContent(palette.getSelectedItem(), n); // Update display
           self._players.next();
         }
       }
@@ -172,5 +173,12 @@ drecco.sudokill.BoardUI.renderEmptyBoard = function(node) {
 
   boardPalette.render(node);
   goog.dom.classes.add(boardPalette.getElement(), 'simple-palette');
+};
+
+/**
+ * @return {number} the number of steps done so far in this game.
+ */
+drecco.sudokill.BoardUI.prototype.getSteps = function() {
+  return this._board.getSteps();
 };
 
