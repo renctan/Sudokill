@@ -1,0 +1,21 @@
+#board-and-sidebar {
+  display: table-row;
+}
+
+#board-and-sidebar > #sudokill-board,#sudokill-sidebar {
+  display: table-cell;
+}
+
+#sudokill-sidebar {
+  width: 170px;
+}
+
+#status-bar {
+  height: 20px;
+  margin: 5px;
+}
+
+#start-game-btn {
+}
+
+

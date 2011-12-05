@@ -1,0 +1,20 @@
+.goog-flat-button {
+  position: relative;
+  margin: 2px;
+  border: 1px solid #000;
+  padding: 2px 6px;
+  color: #fff;
+  background-color: #5F965F;
+  cursor: pointer;
+  outline: none;
+  -moz-outline: none;
+}
+
+/* State: disabled. */
+.goog-flat-button-disabled {
+  border-color: #888;
+  color: #888;
+  background-color: #ccc;
+  cursor: default;
+}
+
