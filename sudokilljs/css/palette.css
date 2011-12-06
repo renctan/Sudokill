@@ -59,7 +59,7 @@
 }
 
 .simple-palette .goog-palette-cell-selected {
-  border: 1px solid #008 !important;
+/*  border: 1px solid #008 !important; */
   padding: 0;
   color: #00f;
   font-weight: bold;
