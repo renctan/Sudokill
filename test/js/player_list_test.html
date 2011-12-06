@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Sudokill Unit Tests - drecco.sudokill.PlayerList</title>
+<script src="../../lib/goog/base.js"></script>
+<script src="../../sudokill-dep.js"></script>
+<script>
+  goog.require('goog.testing.jsunit');
+  goog.require('goog.structs.Set');
+  goog.require('drecco.sudokill.Player');
+  goog.require('drecco.sudokill.PlayerList');
+</script>
+</head>
+
+<body>
+<script>
+var players = null;
+
+var FIRST_PLAYER = 'juri';
+var SECOND_PLAYER = 'chun';
+var THIRD_PLAYER = 'rose';
+
+function setUp() {
+  var playerList = [];
+  playerList.push(new drecco.sudokill.Player(FIRST_PLAYER, false));
+  playerList.push(new drecco.sudokill.Player(SECOND_PLAYER, false));
+  playerList.push(new drecco.sudokill.Player(THIRD_PLAYER, false));
+
+  players = new drecco.sudokill.PlayerList(playerList);
+};
+
+/**
+ * @param {Array.<string>} playerList List of players names.
+ *
+ * @return {goog.structs.Set} The set of names in the list
+ */
+function getNameSet(playerList) {
+  var set = new goog.structs.Set();
+  set.addAll(playerList);
+  return set;
+};
+
+function testGetCurrent() {
+  assertEquals(FIRST_PLAYER, players.getCurrentPlayer().name());
+};
+
+function testNext() {
+  players.next();
+  assertEquals(SECOND_PLAYER, players.getCurrentPlayer().name());
+  players.next();
+  assertEquals(THIRD_PLAYER, players.getCurrentPlayer().name());
+};
+
+function testNextWithWrapAround() {
+  players.next();
+  players.next();
+  players.next();
+
+  assertEquals(FIRST_PLAYER, players.getCurrentPlayer().name());
+  players.next();
+  assertEquals(SECOND_PLAYER, players.getCurrentPlayer().name());
+  players.next();
+  assertEquals(THIRD_PLAYER, players.getCurrentPlayer().name());
+  players.next();
+
+  assertEquals(FIRST_PLAYER, players.getCurrentPlayer().name());
+  players.next();
+  assertEquals(SECOND_PLAYER, players.getCurrentPlayer().name());
+  players.next();
+  assertEquals(THIRD_PLAYER, players.getCurrentPlayer().name());
+};
+
+function testGetAllExceptFirst() {
+  var set = getNameSet(players.getAllExceptCurrent());
+
+  assertEquals(2, set.getCount());
+  assertFalse(set.contains(FIRST_PLAYER));
+  assertTrue(set.contains(SECOND_PLAYER));
+  assertTrue(set.contains(THIRD_PLAYER));
+};
+
+function testGetAllExceptSecond() {
+  players.next();
+  var set = getNameSet(players.getAllExceptCurrent());
+
+  assertEquals(2, set.getCount());
+  assertTrue(set.contains(FIRST_PLAYER));
+  assertFalse(set.contains(SECOND_PLAYER));
+  assertTrue(set.contains(THIRD_PLAYER));
+};
+
+function testGetAllExceptThird() {
+  players.next();
+  players.next();
+  var set = getNameSet(players.getAllExceptCurrent());
+
+  assertEquals(2, set.getCount());
+  assertTrue(set.contains(FIRST_PLAYER));
+  assertTrue(set.contains(SECOND_PLAYER));
+  assertFalse(set.contains(THIRD_PLAYER));
+};
+
+</script>
+</body>
+</html>
+
