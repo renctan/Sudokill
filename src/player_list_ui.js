@@ -5,6 +5,7 @@ goog.require('goog.string');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Button');
+goog.require('goog.ui.CustomButton');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('goog.ui.LabelInput');
 goog.require('goog.dom');
@@ -21,13 +22,12 @@ goog.require('drecco.sudokill.PlayerList');
  * @constructor
  */
 drecco.sudokill.PlayerListUI = function(node) {
-  var self = this;
   this._namesAdded = new goog.structs.StringSet();
 
   var playerListDom = goog.dom.createDom('td');
 
   var addPlayerInDom = goog.dom.createDom('div', { 'class': 'add-player-input' });
-  var addPlayerInput = new goog.ui.LabelInput();
+  this._addPlayerInput = new goog.ui.LabelInput();
 
   var addPlayerDom = goog.dom.createDom('div', { 'class': 'add-player-btn' });
   this._addPlayerBtn = new goog.ui.Button('Add Player',
@@ -42,30 +42,72 @@ drecco.sudokill.PlayerListUI = function(node) {
 
   goog.dom.appendChild(node, fullGUIDom);
 
-  var addPlayerHandler = function(e) {
-    var input = addPlayerInput;
-    var name = input.getValue();
-    var newPlayerColDom;
-    var newPlayerRowDom;
-
-    if (!goog.string.isEmptySafe(name) && !self._namesAdded.contains(name)) {
-      self._namesAdded.add(name);
-
-      newPlayerColDom = goog.dom.createDom('td', { 'class': 'player-list-table-col' });
-      newPlayerRowDom = goog.dom.createDom('tr', { 'class': 'player-list-table-row' },
-        newPlayerColDom);
-
-      goog.dom.setTextContent(newPlayerColDom, name);
-      goog.dom.appendChild(self._playerTableBodyDom, newPlayerRowDom);
-
-      input.clear();
-    }
-  };
-
-  addPlayerInput.render(addPlayerInDom);
-
+  this._addPlayerInput.render(addPlayerInDom);
   this._addPlayerBtn.render(addPlayerDom);
-  goog.events.listen(this._addPlayerBtn, goog.ui.Component.EventType.ACTION, addPlayerHandler);
+
+  goog.events.listen(this._addPlayerBtn, goog.ui.Component.EventType.ACTION,
+    this._addPlayerHandler, false, this);
+};
+
+/**
+ * @private
+ */
+drecco.sudokill.PlayerListUI.prototype._addPlayerHandler = function(e) {
+  var input = this._addPlayerInput;
+  var name = input.getValue();
+  var nameColDom, btnColDom;
+  var rmBtn, upBtn, downBtn;
+  var newPlayerRowDom;
+  var insertionPtDom;
+
+  if (!goog.string.isEmptySafe(name) && !this._namesAdded.contains(name)) {
+    this._namesAdded.add(name);
+
+    nameColDom = goog.dom.createDom('td', 'player-list-table-col');
+    goog.dom.setTextContent(nameColDom, name);
+    btnColDom = goog.dom.createDom('td', 'player-list-table-col');
+
+    newPlayerRowDom = goog.dom.createDom('tr', 'player-list-table-row',
+                                         nameColDom, btnColDom);
+
+    rmBtn = new goog.ui.CustomButton();
+    rmBtn.addClassName('player-list-icon');
+    rmBtn.addClassName('player-list-rm');
+    rmBtn.render(btnColDom);
+    goog.events.listen(rmBtn, goog.ui.Component.EventType.ACTION, function(e) {
+      goog.dom.removeNode(newPlayerRowDom);
+    });
+
+    upBtn = new goog.ui.CustomButton();
+    upBtn.addClassName('player-list-icon');
+    upBtn.addClassName('player-list-up');
+    upBtn.render(btnColDom);
+    goog.events.listen(upBtn, goog.ui.Component.EventType.ACTION, function(e) {
+      insertionPtDom = goog.dom.getPreviousElementSibling(newPlayerRowDom);
+
+      if (insertionPtDom != null) {
+        goog.dom.removeNode(newPlayerRowDom);
+        goog.dom.insertSiblingBefore(newPlayerRowDom, insertionPtDom);
+      }
+    });
+
+    downBtn = new goog.ui.CustomButton();
+    downBtn.addClassName('player-list-icon');
+    downBtn.addClassName('player-list-down');
+    downBtn.render(btnColDom);
+    goog.events.listen(downBtn, goog.ui.Component.EventType.ACTION, function(e) {
+      insertionPtDom = goog.dom.getNextElementSibling(newPlayerRowDom);
+
+      if (insertionPtDom != null) {
+        goog.dom.removeNode(newPlayerRowDom);
+        goog.dom.insertSiblingAfter(newPlayerRowDom, insertionPtDom);
+      }
+    });
+
+    goog.dom.appendChild(this._playerTableBodyDom, newPlayerRowDom);
+
+    input.clear();
+  }
 };
 
 /**
