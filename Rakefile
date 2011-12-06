@@ -13,6 +13,7 @@ SRC_PATH = "src/"
 
 APP_FILE = "sudokill.js"
 APP_DEP_FILE = "sudokill-dep.js"
+OUT_DIR = "sudokilljs"
 
 DEPS_ROOT = "../../"
 SRC_DEPS_PATH = DEPS_ROOT + "src"
@@ -23,8 +24,8 @@ task :build do
          "> #{APP_DEP_FILE}")
 
   system("python #{CLOSURE_BUILDER_PATH} --root=#{CLOSURE_ROOT_PATH} --root=src "+
-         "--namespace=drecco.sudokill.MainUI --output_mode=compiled " +
-         "--compiler_jar=compiler.jar > #{APP_FILE}")
+         "--namespace=drecco.sudokill.Bootstrap --output_mode=compiled " +
+         "--compiler_jar=compiler.jar > #{OUT_DIR}/#{APP_FILE}")
 end
 
 task :default do

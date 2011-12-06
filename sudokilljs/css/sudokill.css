@@ -8,17 +8,20 @@
 
 #sudokill-sidebar {
   width: 200px;
+  padding: 5px;
 }
 
 #status-bar {
   height: 20px;
   margin: 5px;
+  border: 1px solid white;
+  width: 100%;
+  padding: 3px;
+  background-color: beige;
+  color: blue;
 }
 
 #start-game-btn {
 }
 
-#save-score-btn {
-  width: 170px;
-}
 

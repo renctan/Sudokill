@@ -11,19 +11,19 @@
   left: 0px;
   width: 300px;
   background-color: #AAF;
-  border: 2px solid #99c0ff;
+  border: 2px solid white;
 }
 
 .modal-dialog-title {
   position:relative;
-  background: #C3D9FF;
+  background: #5f9f5f;
   padding: 4px;
   font: bold 11px verdana;
   cursor: default;
 }
 
 .modal-dialog-content {
-  background: #E8EEF7;
+  background: #f5f5c0;
   padding: 12px 18px 12px 18px;  font: normal 12px verdana;
   font: normal 12px verdana;
 }
@@ -34,7 +34,7 @@
 }
 
 .modal-dialog-buttons {
-  background: #E8EEF7;
+  background: #f5f5c0;
   padding: 4px;
   font: normal 12px verdana;
   text-align: right;

@@ -9,6 +9,11 @@
   margin: 5px;
 }
 
+.goog-palette-body {
+  background-color: beige;
+  color: black;
+}
+
 .goog-palette-cell {
   border-right: 1px solid #666;
   cursor: pointer;
