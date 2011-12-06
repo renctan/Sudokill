@@ -23,7 +23,7 @@ var LENGTH_SIZE = 9;
  * Creates a UI container for Sudokill.
  * 
  * @param {number} filledCell The number of cells to fill on the initial board.
- * @param {drecco.sudokill.PlayerListUI} playerList The list of players.
+ * @param {drecco.sudokill.PlayerList} playerList The list of players.
  * @param {Node} node The div node to attach this UI to.
  * 
  * @constructor

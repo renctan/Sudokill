@@ -8,7 +8,9 @@ goog.require('goog.ui.Button');
 goog.require('goog.ui.FlatButtonRenderer');
 goog.require('goog.ui.LabelInput');
 goog.require('goog.dom');
+goog.require('goog.structs.StringSet');
 goog.require('drecco.sudokill.Player');
+goog.require('drecco.sudokill.PlayerList');
 
 /**
  * Creates a UI for the player list. There should be only one instance per
@@ -20,9 +22,8 @@ goog.require('drecco.sudokill.Player');
  */
 drecco.sudokill.PlayerListUI = function(node) {
   var self = this;
+  this._namesAdded = new goog.structs.StringSet();
 
-  this._players = [];
-  this._currIdx = 0;
   var playerListDom = goog.dom.createDom('td');
 
   var addPlayerInDom = goog.dom.createDom('div', { 'class': 'add-player-input' });
@@ -32,9 +33,9 @@ drecco.sudokill.PlayerListUI = function(node) {
   this._addPlayerBtn = new goog.ui.Button('Add Player',
     goog.ui.FlatButtonRenderer.getInstance());
 
-  var playerTableBodyDom = goog.dom.createDom('tbody', {});
+  this._playerTableBodyDom = goog.dom.createDom('tbody', {});
   var playerTableDom = goog.dom.createDom('table', { 'class': 'player-table' },
-    playerListDom, playerTableBodyDom);
+    playerListDom, this._playerTableBodyDom);
 
   var fullGUIDom = goog.dom.createDom('div', { 'id': 'player-list' }, addPlayerInDom,
     addPlayerDom, playerTableDom);
@@ -44,15 +45,19 @@ drecco.sudokill.PlayerListUI = function(node) {
   var addPlayerHandler = function(e) {
     var input = addPlayerInput;
     var name = input.getValue();
+    var newPlayerColDom;
+    var newPlayerRowDom;
 
-    var newPlayerColDom = goog.dom.createDom('td', { 'class': 'player-list-table-col' });
-    var newPlayerRowDom = goog.dom.createDom('tr', { 'class': 'player-list-table-row' },
-      newPlayerColDom);
-    goog.dom.setTextContent(newPlayerColDom, name);
+    if (!goog.string.isEmptySafe(name) && !self._namesAdded.contains(name)) {
+      self._namesAdded.add(name);
 
-    if (!goog.string.isEmptySafe(name)) {
-      self._players.push(new drecco.sudokill.Player(name, true));
-      goog.dom.appendChild(playerTableBodyDom, newPlayerRowDom);
+      newPlayerColDom = goog.dom.createDom('td', { 'class': 'player-list-table-col' });
+      newPlayerRowDom = goog.dom.createDom('tr', { 'class': 'player-list-table-row' },
+        newPlayerColDom);
+
+      goog.dom.setTextContent(newPlayerColDom, name);
+      goog.dom.appendChild(self._playerTableBodyDom, newPlayerRowDom);
+
       input.clear();
     }
   };
@@ -64,34 +69,29 @@ drecco.sudokill.PlayerListUI = function(node) {
 };
 
 /**
- * @return {drecco.sudokill.Player} the next player.
+ * @return {number} the number of players.
  */
-drecco.sudokill.PlayerListUI.prototype.next = function() {
-  var size = this._players.length;
-  var next = null;
-
-  if (size > 0) {
-    next = this._players[this._currIdx++];
-
-    if (this._currIdx >= size) {
-      this._currIdx = this._currIdx % size;  
-    }
-  }
-
-  return next;
+drecco.sudokill.PlayerListUI.prototype.playerCount = function() {
+  return goog.dom.getChildren(this._playerTableBodyDom).length;
 };
 
 /**
- * @return {drecco.sudokill.Player} the current player.
+ * @return {drecco.sudokill.PlayerList} the list of players.
  */
-drecco.sudokill.PlayerListUI.prototype.getCurrentPlayer = function() {
-  var player = null;
+drecco.sudokill.PlayerListUI.prototype.getPlayers = function() {
+  var rowDom = goog.dom.getFirstElementChild(this._playerTableBodyDom);
+  var playerList = [];
+  var playerName = '';
+  var isAI = false;
 
-  if (this._players.length > 0) {
-    player = this._players[this._currIdx];
+  while (rowDom != null) {
+    playerName = goog.dom.getTextContent(goog.dom.getFirstElementChild(rowDom));
+    playerList.push(new drecco.sudokill.Player(playerName, isAI));
+
+    rowDom = goog.dom.getNextElementSibling(rowDom);
   }
 
-  return player;
+  return new drecco.sudokill.PlayerList(playerList);
 };
 
 /**
@@ -106,37 +106,5 @@ drecco.sudokill.PlayerListUI.prototype.disable = function() {
  */
 drecco.sudokill.PlayerListUI.prototype.enable = function() {
   this._addPlayerBtn.setEnabled(true);
-};
-
-/**
- * @return {number} the number of players.
- */
-drecco.sudokill.PlayerListUI.prototype.playerCount = function() {
-  return this._players.length;
-};
-
-/**
- * @return {Array.<string>} an array of all players except the current player.
- */
-drecco.sudokill.PlayerListUI.prototype.getAllExceptCurrent = function() {
-  var players = [];
-  var size = this._players.length;
-  var currIdx = this._currIdx + 1;
-
-  if (currIdx >= size) {
-    currIdx = currIdx % size;
-  }
-
-  if (size > 1) {
-    while (currIdx != this._currIdx) {
-      players.push(this._players[currIdx++].name());
-
-      if (currIdx >= size) {
-        currIdx = currIdx % size;
-      }
-    }
-  }
-  
-  return players;
 };
 

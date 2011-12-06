@@ -46,7 +46,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
   drecco.sudokill.BoardUI.renderEmptyBoard(this._boardDom);
 
   var gameSideBarDom = goog.dom.createDom('div', { 'id': 'sudokill-sidebar' });
-  this._playerList = new drecco.sudokill.PlayerListUI(gameSideBarDom);
+  this._playerListUI = new drecco.sudokill.PlayerListUI(gameSideBarDom);
 
   var startGameDom = goog.dom.createDom('div', { 'id': 'start-game-btn' });
   this._startGameBtn = new goog.ui.Button('Start Game',
@@ -68,17 +68,17 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
   var handleStartBtn = function(e) {
     var thisRef = self;
 
-    if (thisRef._playerList.playerCount() > 1) {
+    if (thisRef._playerListUI.playerCount() > 1) {
       if (thisRef._isPlaying) {
         goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'Start Game');
-        thisRef._playerList.enable();
+        thisRef._playerListUI.enable();
         thisRef._disposeBoard();
         goog.dom.setTextContent(thisRef._statusBarDom, ADD_PLAYER_MSG);
         thisRef._saveScoreBtn.setEnabled(false);
       }
       else {
         goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'New Game');
-        thisRef._playerList.disable();
+        thisRef._playerListUI.disable();
         thisRef._createBoard(15);
         thisRef._startGameBtn.setEnabled(false);
       }
@@ -160,21 +160,24 @@ drecco.sudokill.MainUI.prototype._disposeBoard = function() {
  */
 drecco.sudokill.MainUI.prototype._createBoard = function(filledCell) {
   goog.dom.removeChildren(this._boardDom);
+
+  this._activePlayerList = this._playerListUI.getPlayers();
   this._gameState = new drecco.sudokill.BoardUI(filledCell,
-    this._playerList, this._boardDom);
+    this._activePlayerList, this._boardDom);
+
   goog.events.listen(this._gameState, drecco.sudokill.EventType.GAME_OVER,
     this._handleGameOver, false, this);
   goog.events.listen(this._gameState, drecco.sudokill.EventType.NEXT_TURN,
     this._handleNextTurn, false, this);
 
-  this._dispNextPlayer(this._playerList.getCurrentPlayer().name());
+  this._dispNextPlayer(this._activePlayerList.getCurrentPlayer().name());
 };
 
 /**
  * @return {string} the string containing the list of winners.
  */
 drecco.sudokill.MainUI.prototype.getWinners = function() {
-  var winners = this._playerList.getAllExceptCurrent();
+  var winners = this._activePlayerList.getAllExceptCurrent();
   var str = new goog.string.StringBuffer();
   var size = winners.length;
   var lastElem = size - 1;
