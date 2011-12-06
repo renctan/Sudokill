@@ -16,7 +16,7 @@ goog.require('goog.ui.FlatButtonRenderer');
  * @constant
  * @private
  */
-var ADD_PLAYER_MSG = 'Add players then press start to begin playing.';
+var ADD_PLAYER_MSG = 'Add at least 2 players then press start to begin.';
 
 /**
  * @constant
@@ -68,21 +68,23 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
   var handleStartBtn = function(e) {
     var thisRef = self;
 
-    if (thisRef._isPlaying) {
-      goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'Start Game');
-      thisRef._playerList.enable();
-      thisRef._disposeBoard();
-      goog.dom.setTextContent(thisRef._statusBar, '');
-      thisRef._saveScoreBtn.setEnabled(false);
-    }
-    else {
-      goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'New Game');
-      thisRef._playerList.disable();
-      thisRef._createBoard(15);
-      thisRef._startGameBtn.setEnabled(false);
-    }
+    if (thisRef._playerList.playerCount() > 1) {
+      if (thisRef._isPlaying) {
+        goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'Start Game');
+        thisRef._playerList.enable();
+        thisRef._disposeBoard();
+        goog.dom.setTextContent(thisRef._statusBarDom, ADD_PLAYER_MSG);
+        thisRef._saveScoreBtn.setEnabled(false);
+      }
+      else {
+        goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'New Game');
+        thisRef._playerList.disable();
+        thisRef._createBoard(15);
+        thisRef._startGameBtn.setEnabled(false);
+      }
 
-    thisRef._isPlaying = !thisRef._isPlaying;
+      thisRef._isPlaying = !thisRef._isPlaying;
+    }
   };
 
   var handleSaveScore = function(e) {
