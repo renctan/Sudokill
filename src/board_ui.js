@@ -2,17 +2,9 @@ goog.provide('drecco.sudokill.BoardUI');
 
 goog.require('drecco.sudokill.GameOverEvent');
 goog.require('drecco.sudokill.BoardFactory');
-
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.Prompt');
 goog.require('goog.events.EventTarget');
-
-//TODO: rm DEBUG
-    goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.Logger');
-    goog.require('goog.debug.LogManager');
-
-//END DEBUG
 
 /**
  * @private
@@ -66,13 +58,6 @@ drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
 
   goog.events.listen(boardPalette, goog.ui.Component.EventType.ACTION,
     function(e) { self._selectCell(e.target); });
-
-//TODO: rm DEBUG
-    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
-    this.logger = goog.debug.Logger.getLogger('demo');
-    var logConsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
-    logConsole.setCapturing(true);
-    this.logger.info("DEBUG");
 };
 
 goog.inherits(drecco.sudokill.BoardUI, goog.events.EventTarget);
@@ -90,21 +75,20 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
   var self = this;
   var n;
 
-  this.logger.info("Selected: " + x + ", " + y);
   if (!this._isGameOver && this._board.get(x, y) == 0) {
     var handler = function(response) {
       if (response != null) {
         n = parseInt(response);
 
-        self._board.set(x, y, n);
-        goog.dom.setTextContent(palette.getSelectedItem(), n); // Update display
-
-        if (!self._board.isValid(x, y, n)) {
+        if (!self._board.isValid(x, y, n, true)) {
           self._gameOver(x, y, n);
         }
         else { 
           self._players.next();
         }
+
+        self._board.set(x, y, n);
+        goog.dom.setTextContent(palette.getSelectedItem(), n); // Update display
       }
     };
 
