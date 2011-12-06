@@ -24,21 +24,16 @@ goog.require('drecco.sudokill.PlayerList');
 drecco.sudokill.PlayerListUI = function(node) {
   this._namesAdded = new goog.structs.StringSet();
 
-  var playerListDom = goog.dom.createDom('td');
-
-  var addPlayerInDom = goog.dom.createDom('div', { 'class': 'add-player-input' });
+  var addPlayerInDom = goog.dom.createDom('div', { id: 'add-player-input' });
   this._addPlayerInput = new goog.ui.LabelInput();
 
-  var addPlayerDom = goog.dom.createDom('div', { 'class': 'add-player-btn' });
+  var addPlayerDom = goog.dom.createDom('div', { id: 'add-player-btn' });
   this._addPlayerBtn = new goog.ui.Button('Add Player',
     goog.ui.FlatButtonRenderer.getInstance());
+  this._playerTableDom = goog.dom.createDom('div', 'player-table');
 
-  this._playerTableBodyDom = goog.dom.createDom('tbody', {});
-  var playerTableDom = goog.dom.createDom('table', { 'class': 'player-table' },
-    playerListDom, this._playerTableBodyDom);
-
-  var fullGUIDom = goog.dom.createDom('div', { 'id': 'player-list' }, addPlayerInDom,
-    addPlayerDom, playerTableDom);
+  var fullGUIDom = goog.dom.createDom('div', { id: 'player-list' }, addPlayerInDom,
+    addPlayerDom, this._playerTableDom);
 
   goog.dom.appendChild(node, fullGUIDom);
 
@@ -55,56 +50,54 @@ drecco.sudokill.PlayerListUI = function(node) {
 drecco.sudokill.PlayerListUI.prototype._addPlayerHandler = function(e) {
   var input = this._addPlayerInput;
   var name = input.getValue();
-  var nameColDom, btnColDom;
+  var nameDom, btnDom;
   var rmBtn, upBtn, downBtn;
-  var newPlayerRowDom;
+  var newPlayerDom;
   var insertionPtDom;
 
   if (!goog.string.isEmptySafe(name) && !this._namesAdded.contains(name)) {
     this._namesAdded.add(name);
 
-    nameColDom = goog.dom.createDom('td', 'player-list-table-col');
-    goog.dom.setTextContent(nameColDom, name);
-    btnColDom = goog.dom.createDom('td', 'player-list-table-col');
+    nameDom = goog.dom.createDom('div', 'player-list-entry-name');
+    goog.dom.setTextContent(nameDom, name);
+    btnDom = goog.dom.createDom('div', 'player-list-entry-btngrp');
+    newPlayerDom = goog.dom.createDom('div', 'player-list-entry', nameDom, btnDom);
 
-    newPlayerRowDom = goog.dom.createDom('tr', 'player-list-table-row',
-                                         nameColDom, btnColDom);
-
-    rmBtn = new goog.ui.CustomButton();
+    rmBtn = new goog.ui.CustomButton('X');
     rmBtn.addClassName('player-list-icon');
     rmBtn.addClassName('player-list-rm');
-    rmBtn.render(btnColDom);
+    rmBtn.render(btnDom);
     goog.events.listen(rmBtn, goog.ui.Component.EventType.ACTION, function(e) {
-      goog.dom.removeNode(newPlayerRowDom);
+      goog.dom.removeNode(newPlayerDom);
     });
 
-    upBtn = new goog.ui.CustomButton();
+    upBtn = new goog.ui.CustomButton('U');
     upBtn.addClassName('player-list-icon');
     upBtn.addClassName('player-list-up');
-    upBtn.render(btnColDom);
+    upBtn.render(btnDom);
     goog.events.listen(upBtn, goog.ui.Component.EventType.ACTION, function(e) {
-      insertionPtDom = goog.dom.getPreviousElementSibling(newPlayerRowDom);
+      insertionPtDom = goog.dom.getPreviousElementSibling(newPlayerDom);
 
       if (insertionPtDom != null) {
-        goog.dom.removeNode(newPlayerRowDom);
-        goog.dom.insertSiblingBefore(newPlayerRowDom, insertionPtDom);
+        goog.dom.removeNode(newPlayerDom);
+        goog.dom.insertSiblingBefore(newPlayerDom, insertionPtDom);
       }
     });
 
-    downBtn = new goog.ui.CustomButton();
+    downBtn = new goog.ui.CustomButton('D');
     downBtn.addClassName('player-list-icon');
     downBtn.addClassName('player-list-down');
-    downBtn.render(btnColDom);
+    downBtn.render(btnDom);
     goog.events.listen(downBtn, goog.ui.Component.EventType.ACTION, function(e) {
-      insertionPtDom = goog.dom.getNextElementSibling(newPlayerRowDom);
+      insertionPtDom = goog.dom.getNextElementSibling(newPlayerDom);
 
       if (insertionPtDom != null) {
-        goog.dom.removeNode(newPlayerRowDom);
-        goog.dom.insertSiblingAfter(newPlayerRowDom, insertionPtDom);
+        goog.dom.removeNode(newPlayerDom);
+        goog.dom.insertSiblingAfter(newPlayerDom, insertionPtDom);
       }
     });
 
-    goog.dom.appendChild(this._playerTableBodyDom, newPlayerRowDom);
+    goog.dom.appendChild(this._playerTableDom, newPlayerDom);
 
     input.clear();
   }
@@ -114,14 +107,14 @@ drecco.sudokill.PlayerListUI.prototype._addPlayerHandler = function(e) {
  * @return {number} the number of players.
  */
 drecco.sudokill.PlayerListUI.prototype.playerCount = function() {
-  return goog.dom.getChildren(this._playerTableBodyDom).length;
+  return goog.dom.getChildren(this._playerTableDom).length;
 };
 
 /**
  * @return {drecco.sudokill.PlayerList} the list of players.
  */
 drecco.sudokill.PlayerListUI.prototype.getPlayers = function() {
-  var rowDom = goog.dom.getFirstElementChild(this._playerTableBodyDom);
+  var rowDom = goog.dom.getFirstElementChild(this._playerTableDom);
   var playerList = [];
   var playerName = '';
   var isAI = false;

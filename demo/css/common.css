@@ -1,0 +1,13 @@
+.goog-inline-block {
+    display: inline-block;
+    position: relative;
+}
+
+* html .goog-inline-block {
+    display: inline;
+}
+
+:first-child + html .goog-inline-block {
+    display: inline;
+}
+

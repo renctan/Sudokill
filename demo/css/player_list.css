@@ -1,0 +1,58 @@
+#add-player-btn {
+  float: right;
+}
+
+.player-table {
+  display: table;
+  width: 100%;
+}
+
+.player-list-entry {
+  display: table-row;
+}
+
+.player-list-entry * {
+  vertical-align: middle;
+}
+
+.player-list-entry-name {
+  float: left;
+}
+
+.player-list-entry-btngrp {
+  float: right;
+}
+
+.player-list-up {
+  background-position: -16px 0px;
+}
+
+.player-list-down {
+  background-position: -32px 0px;
+}
+
+.player-list-icon {
+/*
+  background-image: url("../img/icons.gif");
+  background-repeat: no-repeat;
+  height: 16px;
+  width: 16px;
+*/
+  margin: 0 1px;
+  padding: 0px;
+  vertical-align: middle;
+}
+
+.goog-custom-button {
+  margin: 2px;
+  border-color: #eeeeee;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  color: #000;
+  text-decoration: none;
+  list-style: none;
+  vertical-align: middle;
+  cursor: default;
+  outline: none;
+}
+
