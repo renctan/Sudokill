@@ -159,6 +159,11 @@ function testNotAlignedAfterForgetLastMove() {
   assertTrue(board.isValid(8, 0, 7, true));
 }
 
+function testSimpleIsValidWithoutAlignmentCheck() {
+  board.set(4, 3, 9);
+  assertTrue(board.isValid(8, 0, 7));
+}
+
 </script>
 </body>
 </html>
