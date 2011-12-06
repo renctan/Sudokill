@@ -1,6 +1,7 @@
 goog.provide('drecco.sudokill.BoardUI');
 
 goog.require('drecco.sudokill.GameOverEvent');
+goog.require('drecco.sudokill.NextTurnEvent');
 goog.require('drecco.sudokill.BoardFactory');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.Prompt');
@@ -85,6 +86,8 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
         }
         else { 
           self._players.next();
+          self.dispatchEvent(new drecco.sudokill.NextTurnEvent(
+            self._players.getCurrentPlayer()));
         }
 
         self._board.set(x, y, n);

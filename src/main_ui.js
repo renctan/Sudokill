@@ -33,7 +33,7 @@ var GAME_NAME = 'sudokilljs';
 drecco.sudokill.MainUI = function(node, optDocRef) {
   var self = this;
 
-  optDocRef = optDocRef || top.document;
+  optDocRef = optDocRef || goog.dom.getOwnerDocument(node);
 
   this._statusBarDom = goog.dom.createDom('div', { id: 'status-bar' });
   goog.dom.setTextContent(this._statusBarDom, ADD_PLAYER_MSG);
@@ -107,6 +107,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
 
 /**
  * @param {drecco.sudokill.GameOverEvent}
+ * @private
  */
 drecco.sudokill.MainUI.prototype._handleGameOver = function(e) {
   var name = e.getName();
@@ -118,6 +119,28 @@ drecco.sudokill.MainUI.prototype._handleGameOver = function(e) {
   this._startGameBtn.setEnabled(true);
   this._saveScoreBtn.setEnabled(true);
 };
+
+/**
+ * @param {drecco.sudokill.NextTurnEvent}
+ * @private
+ */
+drecco.sudokill.MainUI.prototype._handleNextTurn = function(e) {
+  var name = e.getPlayer().name();
+  this._dispNextPlayer(name);
+};
+
+/**
+ * Displays the next player to move on the status bar.
+ * 
+ * @param {string} playerName The name of the player.
+ * @private
+ */
+drecco.sudokill.MainUI.prototype._dispNextPlayer = function(playerName) {
+  var message = goog.string.buildString('Player to move: ', playerName);
+
+  goog.dom.setTextContent(this._statusBarDom, message);
+};
+
 
 /**
  * Disposes the Sudokill board.
@@ -141,6 +164,10 @@ drecco.sudokill.MainUI.prototype._createBoard = function(filledCell) {
     this._playerList, this._boardDom);
   goog.events.listen(this._gameState, drecco.sudokill.EventType.GAME_OVER,
     this._handleGameOver, false, this);
+  goog.events.listen(this._gameState, drecco.sudokill.EventType.NEXT_TURN,
+    this._handleNextTurn, false, this);
+
+  this._dispNextPlayer(this._playerList.getCurrentPlayer().name());
 };
 
 /**
