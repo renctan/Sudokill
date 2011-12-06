@@ -3,12 +3,12 @@
 <head>
   <title>Dr Ecco</title>
 
-  <link rel="stylesheet" href="css/palette.css">
-  <link rel="stylesheet" href="css/common.css">
-  <link rel="stylesheet" href="css/prompt.css">
-  <link rel="stylesheet" href="css/sudokill.css">
-  <link rel="stylesheet" href="css/player_list.css">
-  <link rel="stylesheet" href="css/flatbutton.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/palette.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/common.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/prompt.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/sudokill.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/player_list.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/flatbutton.css">
 </head>
 
 <body>
@@ -17,7 +17,7 @@
 </div>
 
 <div id="board"></div>
-<script src="sudokill.js"></script>
+<script src="games/sudokilljs/sudokill.js"></script>
 <br /><br />
 
   <!-- display the last and best scores -->
@@ -26,7 +26,7 @@
 		// functions.php in case of an opening in the same window
 		// ../../functions.php in case of an opening in a new window
 	
-		include '../../functions.php';
+		include 'functions.php';
 		getScores("sudokilljs");
 	?>
 
