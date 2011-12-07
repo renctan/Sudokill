@@ -46,7 +46,7 @@ drecco.sudokill.Board = function() {
  * @return {number} the offset of the 2D coordinates in 1D.
  * @private
  */
-drecco.sudokill.Board.prototype._calcOffset = function(x, y) {
+drecco.sudokill.Board.calcOffset = function(x, y) {
   return x + y * BOARD_WIDTH;
 };
 
@@ -65,7 +65,7 @@ drecco.sudokill.Board.prototype.set = function(x, y, n) {
   }
   else {
     this._lastMove = new drecco.sudokill.Move(x, y, n);
-    this._map[this._calcOffset(x, y)] = n;
+    this._map[drecco.sudokill.Board.calcOffset(x, y)] = n;
     this._steps++;
   }
 
@@ -81,7 +81,7 @@ drecco.sudokill.Board.prototype.set = function(x, y, n) {
  * @return {number} the number in cell(x, y).
  */
 drecco.sudokill.Board.prototype.get = function(x, y) {
-  return this._map[this._calcOffset(x, y)];
+  return this._map[drecco.sudokill.Board.calcOffset(x, y)];
 };
 
 /**
@@ -205,19 +205,33 @@ drecco.sudokill.Board.prototype.isValid = function(x, y, n, checkAlignment) {
   var lastMove;
 
   if (n != 0 && this.get(x, y) == 0) {
-    if (doCheckAlign) {
-      lastMove = this.getLastMove();
-      
-      if (lastMove != null && !this.rowColFilled(lastMove.getX(), lastMove.getY()) &&
-          x != lastMove.getX() && y != lastMove.getY()) {
-        return false;
-      }
+    if (doCheckAlign && !this.isAligned(x, y)) {
+      return false;
     }
     
     isValid = this.getValidNumbers(x, y).contains(n);
   }
 
   return isValid;
+};
+
+/**
+ * Checks if (x, y) is aligned with the last move.
+ * 
+ * @param {number} x
+ * @param {number} y
+ * 
+ * @return {boolean} true if aligned.
+ */
+drecco.sudokill.Board.prototype.isAligned = function(x, y) {
+  var lastMove = this.getLastMove();
+  
+  if (lastMove != null && !this.rowColFilled(lastMove.getX(), lastMove.getY()) &&
+      x != lastMove.getX() && y != lastMove.getY()) {
+    return false;
+  }
+
+  return true;
 };
 
 /**
