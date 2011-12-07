@@ -70,7 +70,7 @@ goog.inherits(drecco.sudokill.BoardUI, goog.events.EventTarget);
  * @private
  */
 drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
-  var idx = palette.getHighlightedIndex();
+  var idx = palette.getSelectedIndex();
   var x = drecco.sudokill.BoardUI._getX(idx);
   var y = drecco.sudokill.BoardUI._getY(idx);
   var self = this;
