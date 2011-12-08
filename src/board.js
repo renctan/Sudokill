@@ -281,3 +281,62 @@ drecco.sudokill.Board.prototype.getSteps = function() {
   return this._steps;
 };
 
+/**
+ * @param {number} x
+ * @param {number} y
+ * 
+ * @return {boolean} true if the cell is already occupied.
+ */
+drecco.sudokill.Board.prototype.isOccupied = function(x, y) {
+  return this._map[drecco.sudokill.Board.calcOffset(x, y)] != 0;
+};
+
+/**
+ * @param {number} x
+ * @param {number} y
+ * 
+ * @return {boolean} true if a valid move can be made on this cell.
+ */
+drecco.sudokill.Board.prototype.canMakeMove = function(x, y) {
+  return !this.isOccupied(x, y) && !this.getValidNumbers(x, y).isEmpty();
+};
+
+/**
+ * @return {boolean} true if there are still valid moves that can be
+ *   made for the current player.
+ */
+drecco.sudokill.Board.prototype.hasValidMoveAvailable = function() {
+  var x, y;
+  var lastX, lastY;
+  var lastMove = this._lastMove;
+
+  if (this._lastMove != null && !this.rowColFilled(lastMove.getX(),
+      lastMove.getY())) {
+    lastX = lastMove.getX();
+    lastY = lastMove.getY();
+
+    for (x = 0; x < BOARD_WIDTH; x++) {
+      if (this.canMakeMove(x, lastY)) {
+        return true;
+      }
+    }
+
+    for (y = 0; y < BOARD_LENGTH; y++) {
+      if (this.canMakeMove(lastX, y)) {
+        return true;
+      }
+    }
+  }
+  else {
+    for (x = 0; x < BOARD_WIDTH; x++) {
+      for (y = 0; y < BOARD_LENGTH; y++) {
+        if (this.canMakeMove(x, y)) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+};
+

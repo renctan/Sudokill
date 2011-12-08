@@ -164,6 +164,120 @@ function testSimpleIsValidWithoutAlignmentCheck() {
   assertTrue(board.isValid(8, 0, 7));
 }
 
+function testCanMakeMoveOnOccupiedCell() {
+  board.set(4, 3, 9);
+  assertFalse(board.canMakeMove(4, 3));
+}
+
+function testCanMakeMoveOnUnoccupiedCell() {
+  board.set(4, 3, 9);
+  assertTrue(board.canMakeMove(8, 3));
+}
+
+function testCanMakeMoveOnUnoccupiedDeadCell() {
+  board.set(0, 0, 1);
+  board.set(1, 0, 2);
+  board.set(2, 0, 3);
+  board.set(0, 1, 4);
+  board.set(1, 1, 5);
+  board.set(2, 1, 6);
+  board.set(0, 2, 7);
+  board.set(1, 2, 8);
+  board.set(3, 2, 9);
+
+  assertFalse(board.canMakeMove(2, 2));
+}
+
+function testValidMoveAvailableOnDeadCellAsOnlyAvailableSquare() {
+  board.set(0, 4, 1);
+  board.set(1, 4, 2);
+  board.set(2, 4, 3);
+  board.set(3, 4, 4);
+  board.set(5, 4, 6);
+  board.set(6, 4, 7);
+  board.set(7, 4, 8);
+  board.set(8, 4, 9);
+
+  board.set(4, 0, 1);
+  board.set(4, 1, 2);
+  board.set(4, 2, 3);
+  board.set(4, 3, 4);
+  board.set(4, 5, 5);
+  board.set(4, 6, 6);
+  board.set(4, 7, 8);
+
+  board.set(0, 8, 5);
+  board.set(1, 8, 6);
+  board.set(2, 8, 7);
+  board.set(3, 8, 8);
+  board.set(5, 8, 4);
+  board.set(6, 8, 3);
+  board.set(7, 8, 2);
+  board.set(8, 8, 1);
+
+  board.set(4, 8, 9);
+
+  assertFalse(board.hasValidMoveAvailable());
+}
+
+function testValidMoveAvailableOnFreeBoard() {
+  board.set(0, 4, 1);
+  board.set(1, 4, 2);
+  board.set(2, 4, 3);
+  board.set(3, 4, 4);
+  board.set(5, 4, 6);
+  board.set(6, 4, 7);
+  board.set(7, 4, 8);
+  board.set(8, 4, 9);
+
+  board.set(4, 0, 1);
+  board.set(4, 1, 2);
+  board.set(4, 2, 3);
+  board.set(4, 3, 4);
+  board.set(4, 5, 5);
+  board.set(4, 6, 6);
+  board.set(4, 7, 8);
+
+  board.set(0, 8, 5);
+  board.set(1, 8, 6);
+  board.set(2, 8, 7);
+  board.set(3, 8, 8);
+  board.set(5, 8, 4);
+  board.set(6, 8, 3);
+  board.set(7, 8, 2);
+  board.set(8, 8, 1);
+
+  board.set(4, 8, 9);
+
+  board.forgetLastMove();
+
+  assertTrue(board.hasValidMoveAvailable());
+}
+
+function testValidMoveAvailableOnFilledLastMove() {
+  board.set(0, 4, 1);
+  board.set(1, 4, 2);
+  board.set(2, 4, 3);
+  board.set(3, 4, 4);
+  board.set(5, 4, 6);
+  board.set(6, 4, 7);
+  board.set(7, 4, 8);
+  board.set(8, 4, 9);
+
+  board.set(4, 0, 1);
+  board.set(4, 1, 2);
+  board.set(4, 2, 3);
+  board.set(4, 3, 4);
+  board.set(4, 5, 6);
+  board.set(4, 6, 7);
+  board.set(4, 7, 8);
+  board.set(4, 8, 9);
+
+  board.set(4, 4, 5);
+
+  assertTrue(board.hasValidMoveAvailable());
+}
+
 </script>
 </body>
 </html>
