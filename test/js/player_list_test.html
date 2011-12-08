@@ -101,6 +101,50 @@ function testGetAllExceptThird() {
   assertFalse(set.contains(THIRD_PLAYER));
 };
 
+function testSimpleElimPlayer() {
+  players.next();
+  players.eliminateCurrent();
+
+  assertEquals(THIRD_PLAYER, players.getCurrentPlayer().name());
+
+  var set = getNameSet(players.getAllExceptCurrent());
+
+  assertEquals(1, set.getCount());
+  assertTrue(set.contains(FIRST_PLAYER));
+}
+
+function testElimLastPlayer() {
+  players.next();
+  players.next();
+  players.eliminateCurrent();
+
+  assertEquals(FIRST_PLAYER, players.getCurrentPlayer().name());
+
+  var set = getNameSet(players.getAllExceptCurrent());
+
+  assertEquals(1, set.getCount());
+  assertTrue(set.contains(SECOND_PLAYER));
+}
+
+function testElim2ndPlayerTwice() {
+  players.next();
+  players.eliminateCurrent();
+  players.eliminateCurrent();
+
+  assertEquals(FIRST_PLAYER, players.getCurrentPlayer().name());
+
+  assertEquals(1, players.playerCount());
+}
+
+function testElim1stPlayerThrice() {
+  players.eliminateCurrent();
+  players.eliminateCurrent();
+  players.eliminateCurrent();
+
+  assertEquals(null, players.getCurrentPlayer());
+  assertEquals(0, players.playerCount());
+}
+
 </script>
 </body>
 </html>

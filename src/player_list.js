@@ -1,5 +1,7 @@
 goog.provide('drecco.sudokill.PlayerList');
 
+goog.require('goog.structs');
+
 /**
  * Creates a container to store a list of players that can be cycled through in
  * a round robin fashion.
@@ -73,5 +75,19 @@ drecco.sudokill.PlayerList.prototype.getAllExceptCurrent = function() {
   }
   
   return players;
+};
+
+drecco.sudokill.PlayerList.prototype.eliminateCurrent = function() {
+  var name = this._players[this._currIdx].name();
+  var newSize;
+
+  this._players = goog.structs.filter(this._players, function (player) {
+    return player.name() != name;
+  });
+
+  newSize = this._players.length;
+  if (this._currIdx >= newSize) {
+    this._currIdx = 0;
+  }
 };
 
