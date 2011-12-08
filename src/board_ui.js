@@ -5,6 +5,7 @@ goog.require('drecco.sudokill.NextTurnEvent');
 goog.require('drecco.sudokill.BoardFactory');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.Prompt');
+goog.require('goog.dom.classes');
 goog.require('goog.events.EventTarget');
 
 /**
@@ -18,6 +19,15 @@ var WIDTH_SIZE = 9;
  * @constant
  */
 var LENGTH_SIZE = 9;
+
+/**
+ * @enum {string}
+ * @private
+ */
+var CLASS = {
+  BAD_CELL: 'board-bad-cell',
+  GOOD_CELL: 'board-good-cell'
+};
 
 /**
  * Creates a UI container for Sudokill.
@@ -51,14 +61,16 @@ drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
     }
   }
 
-  boardPalette = new goog.ui.Palette(items);
-  boardPalette.setSize(WIDTH_SIZE);
+  this._boardPalette = new goog.ui.Palette(items);
+  this._boardPalette.setSize(WIDTH_SIZE);
 
-  boardPalette.render(node);
-  goog.dom.classes.add(boardPalette.getElement(), 'simple-palette');
+  this._boardPalette.render(node);
+  goog.dom.classes.add(this._boardPalette.getElement(), 'simple-palette');
 
-  goog.events.listen(boardPalette, goog.ui.Component.EventType.ACTION,
+  goog.events.listen(this._boardPalette, goog.ui.Component.EventType.ACTION,
     function(e) { self._selectCell(e.target); });
+
+  this._refreshDisplay();
 };
 
 goog.inherits(drecco.sudokill.BoardUI, goog.events.EventTarget);
@@ -76,7 +88,7 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
   var self = this;
   var n;
 
-  if (!this._isGameOver && this._board.get(x, y) == 0) {
+  if (!this._isGameOver && this._board.get(x, y) == 0 && this._board.isAligned(x, y)) {
     var handler = function(response) {
       if (response != null) {
         n = parseInt(response);
@@ -91,6 +103,7 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
         }
 
         self._board.set(x, y, n);
+        self._refreshDisplay();
         goog.dom.setTextContent(palette.getSelectedItem(), n); // Update display
       }
     };
@@ -167,5 +180,36 @@ drecco.sudokill.BoardUI.renderEmptyBoard = function(node) {
  */
 drecco.sudokill.BoardUI.prototype.getSteps = function() {
   return this._board.getSteps();
+};
+
+/**
+ * @private
+ */
+drecco.sudokill.BoardUI.prototype._refreshDisplay = function() {
+  var x = 0;
+  var y;
+  var cell;
+  var origSelectedIdx;
+
+  this._boardPalette.setEnabled(false);
+  origSelectedIdx = this._boardPalette.getSelectedIndex();
+
+  for (; x < WIDTH_SIZE; x++) {
+    for (y = 0; y < LENGTH_SIZE; y++) {
+      this._boardPalette.setSelectedIndex(drecco.sudokill.Board.calcOffset(x, y));
+      // getSelectedItem actually gives the text node so need to get the parent
+      cell = this._boardPalette.getSelectedItem().parentNode;
+
+      if (this._board.get(x, y) != 0 || !this._board.isAligned(x, y)) {
+        goog.dom.classes.addRemove(cell, CLASS.GOOD_CELL, CLASS.BAD_CELL);
+      }
+      else {
+        goog.dom.classes.addRemove(cell, CLASS.BAD_CELL, CLASS.GOOD_CELL);
+      }
+    }
+  }
+
+  this._boardPalette.setSelectedIndex(origSelectedIdx);
+  this._boardPalette.setEnabled(true);
 };
 

@@ -14,6 +14,14 @@
   color: black;
 }
 
+.board-bad-cell {
+  background-color: silver;
+}
+
+.board-good-cell {
+  background-color: beige;
+}
+
 .goog-palette-cell {
   border-right: 1px solid #666;
   cursor: pointer;
