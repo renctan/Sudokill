@@ -7,6 +7,7 @@ goog.require('goog.events');
  */
 drecco.sudokill.EventType = {
   GAME_OVER: goog.events.getUniqueId('Game Over'),
-  NEXT_TURN: goog.events.getUniqueId('Next Turn')
+  NEXT_TURN: goog.events.getUniqueId('Next Turn'),
+  ELIM_PLAYER: goog.events.getUniqueId('Elim Player')
 };
 

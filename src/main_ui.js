@@ -9,6 +9,7 @@ goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.ui.Dialog');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.FlatButtonRenderer');
 
@@ -169,6 +170,14 @@ drecco.sudokill.MainUI.prototype._createBoard = function(filledCell) {
     this._handleGameOver, false, this);
   goog.events.listen(this._gameState, drecco.sudokill.EventType.NEXT_TURN,
     this._handleNextTurn, false, this);
+  goog.events.listen(this._gameState, drecco.sudokill.EventType.ELIM_PLAYER,
+    function(e) {
+      var player = e.getName();
+      var dialog = new goog.ui.Dialog();
+      dialog.setButtonSet(goog.ui.Dialog.ButtonSet.createOk());
+      dialog.setContent('<div>' + player + ' got eliminated.</div>');
+      dialog.setVisible(true);
+  });
 
   this._dispNextPlayer(this._activePlayerList.getCurrentPlayer().name());
 };

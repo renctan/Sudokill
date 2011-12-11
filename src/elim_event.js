@@ -1,10 +1,10 @@
-goog.provide('drecco.sudokill.GameOverEvent');
+goog.provide('drecco.sudokill.EliminatedEvent');
 
 goog.require('drecco.sudokill.EventType');
 goog.require('goog.events.Event');
 
 /**
- * Creates a new event with type @link{drecco.sudokill.EventType.GAME_OVER}.
+ * Creates a new event with type @link{drecco.sudokill.EventType.ELIM_PLAYER}.
  * 
  * @param {string} playerName The name of the winning player.
  * @param {Object|null|undefined} target The target of this event.
@@ -12,8 +12,8 @@ goog.require('goog.events.Event');
  * @constructor
  * @extends {goog.events.Event}
  */
-drecco.sudokill.GameOverEvent = function(playerName, target) {
-  goog.base(this, drecco.sudokill.EventType.GAME_OVER, target);
+drecco.sudokill.EliminatedEvent = function(playerName, target) {
+  goog.base(this, drecco.sudokill.EventType.ELIM_PLAYER, target);
   this._playerName = playerName;
 };
 
@@ -22,7 +22,7 @@ goog.inherits(drecco.sudokill.GameOverEvent, goog.events.Event);
 /**
  * @return {string} the name of the player stored in this event.
  */
-drecco.sudokill.GameOverEvent.prototype.getName = function() {
+drecco.sudokill.EliminatedEvent.prototype.getName = function() {
   return this._playerName;
 };
 

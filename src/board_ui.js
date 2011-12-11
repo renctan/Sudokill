@@ -49,15 +49,13 @@ drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
   var items = [];
   var x, y;
   var cell;
-  var cellDisp = '';
   var boardPalette;
   var self = this;
 
   for (y = 0; y < LENGTH_SIZE; y++) {
     for (x = 0; x < WIDTH_SIZE; x++) {
       cell = this._board.get(x, y);
-      cellDisp = (cell == 0)? '' : cell;
-      items.push(goog.dom.createTextNode(cellDisp));
+      items.push(goog.dom.createTextNode((cell == 0)? '' : cell));
     }
   }
 
@@ -88,21 +86,35 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
   var self = this;
   var n;
 
-  if (!this._isGameOver && this._board.get(x, y) == 0 && this._board.isAligned(x, y)) {
+  if (!this._isGameOver && !this._board.isOccupied(x, y) && this._board.isAligned(x, y)) {
+    /**
+     * Handler for getting the value selected by user. Assumption: The players have no way
+     * of making invalid moves.
+     */
     var handler = function(response) {
+      var playerEliminated;
+
       if (response != null) {
         n = parseInt(response);
+        self._board.set(x, y, n);
 
-        if (!self._board.isValid(x, y, n, true)) {
-          self._gameOver(x, y, n);
+        self._players.next();
+        while (!self._board.hasValidMoveAvailable() && self._players.playerCount() > 1) {
+          playerEliminated = self._players.getCurrentPlayer();
+          self._players.eliminateCurrent();
+          self.dispatchEvent(new drecco.sudokill.EliminatedEvent(
+            self._players.getCurrentPlayer()));
+          self._board.forgetLastMove();
         }
-        else { 
-          self._players.next();
+
+        if (self._players.playerCount() <= 1) {
+          self._gameOver();
+        }
+        else {
           self.dispatchEvent(new drecco.sudokill.NextTurnEvent(
             self._players.getCurrentPlayer()));
         }
 
-        self._board.set(x, y, n);
         self._refreshDisplay();
         goog.dom.setTextContent(palette.getSelectedItem(), n); // Update display
       }
@@ -138,11 +150,10 @@ drecco.sudokill.BoardUI._getY = function(num) {
  * Ends the game and dispatches @link{drecco.sudokill.EventType.GAME_OVER}.
  * @private
  */
-drecco.sudokill.BoardUI.prototype._gameOver = function(x, y, n) {
-  var move = new drecco.sudokill.Move(x, y, n);
+drecco.sudokill.BoardUI.prototype._gameOver = function() {
   this._isGameOver = true;
   this.dispatchEvent(new drecco.sudokill.GameOverEvent(
-    this._players.getCurrentPlayer().name(), move));
+    this._players.getCurrentPlayer().name()));
 };
 
 /**
@@ -200,11 +211,11 @@ drecco.sudokill.BoardUI.prototype._refreshDisplay = function() {
       // getSelectedItem actually gives the text node so need to get the parent
       cell = this._boardPalette.getSelectedItem().parentNode;
 
-      if (this._board.get(x, y) != 0 || !this._board.isAligned(x, y)) {
-        goog.dom.classes.addRemove(cell, CLASS.GOOD_CELL, CLASS.BAD_CELL);
+      if (this._board.canMakeMove(x, y)) {
+        goog.dom.classes.addRemove(cell, CLASS.BAD_CELL, CLASS.GOOD_CELL);
       }
       else {
-        goog.dom.classes.addRemove(cell, CLASS.BAD_CELL, CLASS.GOOD_CELL);
+        goog.dom.classes.addRemove(cell, CLASS.GOOD_CELL, CLASS.BAD_CELL);
       }
     }
   }
