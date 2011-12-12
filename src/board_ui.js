@@ -4,9 +4,11 @@ goog.require('drecco.sudokill.GameOverEvent');
 goog.require('drecco.sudokill.NextTurnEvent');
 goog.require('drecco.sudokill.BoardFactory');
 goog.require('goog.ui.Palette');
-goog.require('goog.ui.Prompt');
+goog.require('goog.ui.PaletteRenderer');
+goog.require('goog.ui.Dialog');
 goog.require('goog.dom.classes');
 goog.require('goog.events.EventTarget');
+goog.require('goog.structs');
 
 /**
  * @private
@@ -19,6 +21,12 @@ var WIDTH_SIZE = 9;
  * @constant
  */
 var LENGTH_SIZE = 9;
+
+/**
+ * @private
+ * @constant
+ */
+var DIALOG_SELECTION_COL = 5;
 
 /**
  * @enum {string}
@@ -66,7 +74,7 @@ drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
   goog.dom.classes.add(this._boardPalette.getElement(), 'simple-palette');
 
   goog.events.listen(this._boardPalette, goog.ui.Component.EventType.ACTION,
-    function(e) { self._selectCell(e.target); });
+    function(e) { self._selectCell(e.target); }, false, this);
 
   this._refreshDisplay();
 };
@@ -83,50 +91,69 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
   var idx = palette.getSelectedIndex();
   var x = drecco.sudokill.BoardUI._getX(idx);
   var y = drecco.sudokill.BoardUI._getY(idx);
-  var self = this;
-  var n;
+  var validNumbers;
+  var paletteItems;
+  var paletteInDlg;
+  var dialog;
+  var buttonSet;
 
   if (!this._isGameOver && !this._board.isOccupied(x, y) && this._board.isAligned(x, y)) {
+    dialog = new goog.ui.Dialog();
+
+    validNumbers = this._board.getValidNumbers(x, y).getValues();
+    paletteItems = goog.structs.map(validNumbers, function(number) {
+      return goog.dom.createTextNode(String(number)); });
+    paletteInDlg = new goog.ui.Palette(paletteItems);
+    paletteInDlg.setSize(DIALOG_SELECTION_COL);
+    paletteInDlg.render(dialog.getContentElement());
+    goog.dom.classes.add(paletteInDlg.getElement(), 'simple-palette');
+
     /**
-     * Handler for getting the value selected by user. Assumption: The players have no way
-     * of making invalid moves.
+     * Handler for getting the value selected by user.
+     * 
+     * @param {goog.events.Event} e
      */
-    var handler = function(response) {
+    var handler = function(e) {
+      var selectedIdx = e.target.getSelectedIndex();
       var playerEliminated;
+      var n;
 
-      if (response != null) {
-        n = parseInt(response);
-        self._board.set(x, y, n);
+      if (selectedIdx >= 0) {
+        n = validNumbers[selectedIdx];
+        this._board.set(x, y, n);
 
-        self._players.next();
-        while (!self._board.hasValidMoveAvailable() && self._players.playerCount() > 1) {
-          playerEliminated = self._players.getCurrentPlayer();
-          self._players.eliminateCurrent();
-          self.dispatchEvent(new drecco.sudokill.EliminatedEvent(
-            self._players.getCurrentPlayer()));
-          self._board.forgetLastMove();
+        this._players.next();
+        while (!this._board.hasValidMoveAvailable() && this._players.playerCount() > 1) {
+          playerEliminated = this._players.getCurrentPlayer();
+          this._players.eliminateCurrent();
+          this.dispatchEvent(new drecco.sudokill.EliminatedEvent(
+                               this._players.getCurrentPlayer()));
+          this._board.forgetLastMove();
         }
 
-        if (self._players.playerCount() <= 1) {
-          self._gameOver();
+        if (this._players.playerCount() <= 1) {
+          this._gameOver();
         }
         else {
-          self.dispatchEvent(new drecco.sudokill.NextTurnEvent(
-            self._players.getCurrentPlayer()));
+          this.dispatchEvent(new drecco.sudokill.NextTurnEvent(
+                               this._players.getCurrentPlayer()));
         }
 
-        self._refreshDisplay();
         goog.dom.setTextContent(palette.getSelectedItem(), n); // Update display
+        this._refreshDisplay();
       }
+
+      dialog.dispose();
     };
 
-    var prompt = new goog.ui.Prompt('', 'Set the value.', handler);
-    prompt.setValidationFunction(function(input) {
-      var num = parseInt(input);
-      return (num >= 1 && num <= 9);
-    });
+    goog.events.listen(paletteInDlg, goog.ui.Component.EventType.ACTION,
+      handler, false, this);
 
-    prompt.setVisible(true);
+    buttonSet = new goog.ui.Dialog.ButtonSet();
+    buttonSet.addButton({ caption: 'Cancel', key: 'cancel' }, true, true);
+    dialog.setButtonSet(buttonSet);
+
+    dialog.setVisible(true);
   }
 };
 
