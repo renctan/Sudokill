@@ -17,7 +17,7 @@ drecco.sudokill.EliminatedEvent = function(playerName, target) {
   this._playerName = playerName;
 };
 
-goog.inherits(drecco.sudokill.GameOverEvent, goog.events.Event);
+goog.inherits(drecco.sudokill.EliminatedEvent, goog.events.Event);
 
 /**
  * @return {string} the name of the player stored in this event.

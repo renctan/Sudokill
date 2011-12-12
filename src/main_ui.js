@@ -66,6 +66,9 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
   this._saveScoreBtn.render(saveScoreBtnDom);
   goog.dom.appendChild(node, saveScoreBtnDom);
 
+  /**
+   * Handler for the start button.
+   */
   var handleStartBtn = function(e) {
     var thisRef = self;
 
@@ -88,11 +91,14 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
     }
   };
 
+  /**
+   * Handler for the save score button.
+   */
   var handleSaveScore = function(e) {
     var thisRef = self;
     var query = new goog.Uri.QueryData();
     query.add('task', GAME_NAME);
-    query.add('winner', thisRef.getWinners());
+    query.add('winner', thisRef.getWinner());
     query.add('ws', thisRef.getWinnerScore());
 
     optDocRef.location = 'index.php?' + query.toString();
@@ -111,10 +117,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
  * @private
  */
 drecco.sudokill.MainUI.prototype._handleGameOver = function(e) {
-  var name = e.getName();
-  var move = e.getMove();
-  var message = goog.string.buildString('Game Over: Illegal move by ',
-    name, ' with ', move.getN(), ' on (', move.getX(), ', ', move.getY(), ')');
+  var message = goog.string.buildString(e.getName(), ' won!');
 
   goog.dom.setTextContent(this._statusBarDom, message);
   this._startGameBtn.setEnabled(true);
@@ -183,26 +186,10 @@ drecco.sudokill.MainUI.prototype._createBoard = function(filledCell) {
 };
 
 /**
- * @return {string} the string containing the list of winners.
+ * @return {string} the string containing the name of the winner.
  */
-drecco.sudokill.MainUI.prototype.getWinners = function() {
-  var winners = this._activePlayerList.getAllExceptCurrent();
-  var str = new goog.string.StringBuffer();
-  var size = winners.length;
-  var lastElem = size - 1;
-  var x = 0;
-
-  str.append('[');
-  for (; x < size; x++) {
-    str.append(winners[x]);
-
-    if (x != lastElem) {
-      str.append(', ');
-    }
-  }
-  str.append(']');
-
-  return str.toString();
+drecco.sudokill.MainUI.prototype.getWinner = function() {
+  return this._activePlayerList.getCurrentPlayer().name();
 };
 
 /**

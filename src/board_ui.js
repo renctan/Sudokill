@@ -3,6 +3,7 @@ goog.provide('drecco.sudokill.BoardUI');
 goog.require('drecco.sudokill.GameOverEvent');
 goog.require('drecco.sudokill.NextTurnEvent');
 goog.require('drecco.sudokill.BoardFactory');
+goog.require('drecco.sudokill.EliminatedEvent');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.PaletteRenderer');
 goog.require('goog.ui.Dialog');
@@ -126,8 +127,7 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
         while (!this._board.hasValidMoveAvailable() && this._players.playerCount() > 1) {
           playerEliminated = this._players.getCurrentPlayer();
           this._players.eliminateCurrent();
-          this.dispatchEvent(new drecco.sudokill.EliminatedEvent(
-                               this._players.getCurrentPlayer()));
+          this.dispatchEvent(new drecco.sudokill.EliminatedEvent(playerEliminated.name()));
           this._board.forgetLastMove();
         }
 
