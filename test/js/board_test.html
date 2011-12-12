@@ -188,6 +188,11 @@ function testCanMakeMoveOnUnoccupiedDeadCell() {
   assertFalse(board.canMakeMove(2, 2));
 }
 
+function testCanMakeMoveOnUnalignedCell() {
+  board.set(4, 3, 9);
+  assertFalse(board.canMakeMove(8, 8));
+}
+
 function testValidMoveAvailableOnDeadCellAsOnlyAvailableSquare() {
   board.set(0, 4, 1);
   board.set(1, 4, 2);

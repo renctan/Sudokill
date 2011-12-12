@@ -298,7 +298,8 @@ drecco.sudokill.Board.prototype.isOccupied = function(x, y) {
  * @return {boolean} true if a valid move can be made on this cell.
  */
 drecco.sudokill.Board.prototype.canMakeMove = function(x, y) {
-  return !this.isOccupied(x, y) && !this.getValidNumbers(x, y).isEmpty();
+  return !this.isOccupied(x, y) && this.isAligned(x, y) &&
+    !this.getValidNumbers(x, y).isEmpty();
 };
 
 /**
