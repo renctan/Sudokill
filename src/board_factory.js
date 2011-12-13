@@ -2,6 +2,7 @@ goog.provide('drecco.sudokill.BoardFactory');
 
 goog.require('drecco.sudokill.Board');
 goog.require('drecco.sudokill.Move');
+goog.require('drecco.sudokill.RandomStrategy');
 goog.require('goog.structs.PriorityQueue');
 
 /**
@@ -80,6 +81,44 @@ drecco.sudokill.BoardFactory.create = function(filledCells) {
   newBoard = new drecco.sudokill.Board();
   for (x = 0; x < filledCells; x++) {
     move = moves.dequeue();
+    newBoard.set(move.getX(), move.getY(), move.getN());
+  }
+
+  newBoard.forgetLastMove();
+  newBoard.clearSteps();
+
+  return newBoard;
+};
+
+/**
+ * Creates a random Sudoku board by randomly assigning random cells
+ * with random numbers. The generated cells will still follow the
+ * Sudoku rules, but since it is randomly filling the board, it may
+ * never terminate if the given filledCells is too large because the
+ * generated partial board may not have a valid solution.
+ * 
+ * @param {number} filledCells The number of cells to be filled.
+ * 
+ * @return {drecco.sudokill.Board} the generated board.
+ * 
+ * @throws IllegalArgumentException if filledCells is > 81 or is negative.
+ */
+drecco.sudokill.BoardFactory.randBoard = function(filledCells) {
+  var x, y, n;
+  var board;
+  var newBoard = new drecco.sudokill.Board();
+  var move;
+  var count;
+
+  if (filledCells > 81 || filledCells < 0) {
+    throw {
+      name: 'IllegalArgumentException',
+      message: 'filledCell should be between 0 and 81.'
+    };
+  }
+
+  for(count = 0; count < filledCells; count++) {
+    move = drecco.sudokill.RandomStrategy.makeMove(newBoard);
     newBoard.set(move.getX(), move.getY(), move.getN());
   }
 

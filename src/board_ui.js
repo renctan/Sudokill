@@ -51,7 +51,7 @@ var CLASS = {
 drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
   goog.base(this);
 
-  this._board = new drecco.sudokill.BoardFactory.create(filledCell);
+  this._board = new drecco.sudokill.BoardFactory.randBoard(filledCell);
   this._isGameOver = false;
   this._players = playerList;
 
@@ -100,6 +100,7 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
 
   if (!this._isGameOver && !this._board.isOccupied(x, y) && this._board.isAligned(x, y)) {
     dialog = new goog.ui.Dialog();
+    dialog.setTitle('Please select a number to set.');
 
     validNumbers = this._board.getValidNumbers(x, y).getValues();
     paletteItems = goog.structs.map(validNumbers, function(number) {
