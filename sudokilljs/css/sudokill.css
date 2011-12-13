@@ -11,14 +11,17 @@
   padding: 5px;
 }
 
-#status-bar {
-  height: 20px;
+#status-bar, #add-player-desc {
   margin: 5px;
   border: 1px solid white;
   width: 100%;
   padding: 3px;
   background-color: beige;
   color: blue;
+}
+
+#status-bar {
+  height: 20px;
 }
 
 #start-game-btn {

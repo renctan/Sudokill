@@ -1,13 +1,17 @@
 .goog-inline-block {
-    display: inline-block;
-    position: relative;
+  display: inline-block;
+  position: relative;
 }
 
 * html .goog-inline-block {
-    display: inline;
+  display: inline;
 }
 
 :first-child + html .goog-inline-block {
-    display: inline;
+  display: inline;
+}
+
+.clear-float {
+  clear: both;
 }
 
