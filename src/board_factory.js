@@ -1,3 +1,7 @@
+/**
+ * Contains the implementation for creating partially filled Sudokill boards.
+ */
+
 goog.provide('drecco.sudokill.BoardFactory');
 
 goog.require('drecco.sudokill.Board');

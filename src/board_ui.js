@@ -1,3 +1,8 @@
+/**
+ * Contains the implementation for the GUI for the Sudoku board. This is also responsible
+ * for displaying and handling the number input selection dialog.
+ */
+
 goog.provide('drecco.sudokill.BoardUI');
 
 goog.require('drecco.sudokill.GameOverEvent');

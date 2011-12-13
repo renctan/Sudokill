@@ -1,3 +1,7 @@
+/**
+ * Contains the enum for the custom events used in this project.
+ */
+
 goog.provide('drecco.sudokill.EventType');
 
 goog.require('goog.events');

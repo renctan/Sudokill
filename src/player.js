@@ -1,3 +1,7 @@
+/**
+ * Contains the implementation for the class that models a player in Sudokill.
+ */
+
 goog.provide('drecco.sudokill.Player');
 
 /**

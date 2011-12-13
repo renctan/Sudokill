@@ -1,3 +1,8 @@
+/**
+ * Contains the implementation for a class that represents a player move in
+ * a Sudoku game.
+ */
+
 goog.provide('drecco.sudokill.Move');
 
 goog.require('goog.functions');

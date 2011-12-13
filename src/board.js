@@ -1,3 +1,9 @@
+/**
+ * Contains the implementation for the class that models a Sudoku Board. This board contains
+ * several helper methods that supports the rules described for 
+ * <a href="http://cs.nyu.edu/courses/fall11/CSCI-GA.2965-001/sudokill.html">Sudokill</a>
+ */
+
 goog.provide('drecco.sudokill.Board');
 
 goog.require('drecco.sudokill.Move');

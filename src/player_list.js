@@ -1,3 +1,7 @@
+/**
+ * Contains the model representing a list of players.
+ */
+
 goog.provide('drecco.sudokill.PlayerList');
 
 goog.require('goog.structs');

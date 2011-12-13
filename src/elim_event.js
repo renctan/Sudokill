@@ -1,3 +1,7 @@
+/**
+ * Contains the definition of the player eliminated event.
+ */
+
 goog.provide('drecco.sudokill.EliminatedEvent');
 
 goog.require('drecco.sudokill.EventType');

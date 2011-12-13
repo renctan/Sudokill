@@ -1,3 +1,7 @@
+/**
+ * Contains the logic for making a random move in a Sudoku game.
+ */
+
 goog.provide('drecco.sudokill.RandomStrategy');
 
 goog.require('drecco.sudokill.Util');

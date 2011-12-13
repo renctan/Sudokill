@@ -14,5 +14,4 @@ goog.addDependency('../../src/player.js', ['drecco.sudokill.Player'], []);
 goog.addDependency('../../src/player_list.js', ['drecco.sudokill.PlayerList'], ['goog.structs']);
 goog.addDependency('../../src/player_list_ui.js', ['drecco.sudokill.PlayerListUI'], ['drecco.sudokill.Player', 'drecco.sudokill.PlayerList', 'goog.dom', 'goog.events', 'goog.events.EventType', 'goog.string', 'goog.structs.CircularBuffer', 'goog.structs.StringSet', 'goog.ui.Button', 'goog.ui.CustomButton', 'goog.ui.FlatButtonRenderer', 'goog.ui.LabelInput']);
 goog.addDependency('../../src/random_strategy.js', ['drecco.sudokill.RandomStrategy'], ['drecco.sudokill.Move', 'drecco.sudokill.Util']);
-goog.addDependency('../../src/sudokill_game.js', ['drecco.sudokill.Game'], ['drecco.sudokill.BoardFactory']);
 goog.addDependency('../../src/util.js', ['drecco.sudokill.Util'], []);

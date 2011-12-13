@@ -1,3 +1,7 @@
+/**
+ * Contains a collection of miscellaneous utility methods.
+ */
+
 goog.provide('drecco.sudokill.Util');
 
 /**

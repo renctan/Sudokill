@@ -1,3 +1,7 @@
+/**
+ * Contains the UI implementation for displaying the list of players.
+ */
+
 goog.provide('drecco.sudokill.PlayerListUI');
 
 goog.require('goog.structs.CircularBuffer');

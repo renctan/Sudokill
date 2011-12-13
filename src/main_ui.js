@@ -1,3 +1,9 @@
+/**
+ * Contains the implementation for the entire GUI components for Sudokill. Also contains
+ * the logic for handling the start game and save score button. This is also responsible for
+ * updating the status message.
+ */
+
 goog.provide('drecco.sudokill.MainUI');
 
 goog.require('drecco.sudokill.BoardUI');
@@ -26,6 +32,9 @@ var ADD_PLAYER_MSG = 'Add at least 2 players then press start to begin.';
 var GAME_NAME = 'sudokilljs';
 
 /**
+ * Creates the main UI component. This is intended to be used only on a single html
+ * document.
+ * 
  * @param {Node} node The <b>div<\b> element to attach this UI to.
  * @param {?Document} optDocRef The reference to the html document. This is used for
  *   sending the request to the server.
@@ -144,7 +153,6 @@ drecco.sudokill.MainUI.prototype._dispNextPlayer = function(playerName) {
 
   goog.dom.setTextContent(this._statusBarDom, message);
 };
-
 
 /**
  * Disposes the Sudokill board.

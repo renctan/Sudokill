@@ -1,3 +1,7 @@
+/**
+ * Contains the definition for the game over event.
+ */
+
 goog.provide('drecco.sudokill.GameOverEvent');
 
 goog.require('drecco.sudokill.EventType');

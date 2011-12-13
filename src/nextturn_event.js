@@ -1,3 +1,7 @@
+/**
+ * Contains the definition for the next player's turn event.
+ */
+
 goog.provide('drecco.sudokill.NextTurnEvent');
 
 goog.require('drecco.sudokill.EventType');
