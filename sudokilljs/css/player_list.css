@@ -32,12 +32,10 @@
 }
 
 .player-list-icon {
-/*
-  background-image: url("../img/icons.gif");
+  background-image: url("../img/icons.png");
   background-repeat: no-repeat;
   height: 16px;
   width: 16px;
-*/
   margin: 0 1px;
   padding: 0px;
   vertical-align: middle;
