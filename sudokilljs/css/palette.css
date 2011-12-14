@@ -14,8 +14,12 @@
   color: black;
 }
 
-.board-bad-cell {
+.board-bad-cell,  .board-occupied {
   background-color: silver;
+}
+
+.board-bad-cell {
+  color: red;
 }
 
 .board-good-cell {

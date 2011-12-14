@@ -40,7 +40,8 @@ var DIALOG_SELECTION_COL = 5;
  */
 var CLASS = {
   BAD_CELL: 'board-bad-cell',
-  GOOD_CELL: 'board-good-cell'
+  GOOD_CELL: 'board-good-cell',
+  OCCUPIED_CELL: 'board-occupied'
 };
 
 /**
@@ -234,6 +235,7 @@ drecco.sudokill.BoardUI.prototype._refreshDisplay = function() {
   var y;
   var cell;
   var origSelectedIdx;
+  var selectedItem;
 
   this._boardPalette.setEnabled(false);
   origSelectedIdx = this._boardPalette.getSelectedIndex();
@@ -241,10 +243,20 @@ drecco.sudokill.BoardUI.prototype._refreshDisplay = function() {
   for (; x < WIDTH_SIZE; x++) {
     for (y = 0; y < LENGTH_SIZE; y++) {
       this._boardPalette.setSelectedIndex(drecco.sudokill.Board.calcOffset(x, y));
-      // getSelectedItem actually gives the text node so need to get the parent
-      cell = this._boardPalette.getSelectedItem().parentNode;
 
-      if (this._board.canMakeMove(x, y)) {
+      selectedItem = this._boardPalette.getSelectedItem();
+      // getSelectedItem actually gives the text node so need to get the parent
+      cell = selectedItem.parentNode;
+
+      if (this._board.isOccupied(x, y)) {
+        goog.dom.classes.addRemove(cell, CLASS.GOOD_CELL, CLASS.OCCUPIED_CELL);
+      }
+      // TODO: possible optimization? Check if cell is already X?
+      else if (this._board.getValidNumbers(x, y).isEmpty()) {
+        goog.dom.classes.addRemove(cell, CLASS.GOOD_CELL, CLASS.BAD_CELL);
+        goog.dom.setTextContent(selectedItem, 'X');
+      }
+      else if(this._board.isAligned(x, y)) {
         goog.dom.classes.addRemove(cell, CLASS.BAD_CELL, CLASS.GOOD_CELL);
       }
       else {
