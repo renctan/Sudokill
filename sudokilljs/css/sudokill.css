@@ -11,7 +11,7 @@
   padding: 5px;
 }
 
-#status-bar, #add-player-desc {
+#status-bar {
   margin: 5px;
   border: 1px solid white;
   width: 100%;

@@ -18,13 +18,6 @@ goog.require('drecco.sudokill.Player');
 goog.require('drecco.sudokill.PlayerList');
 
 /**
- * @constant
- * @private
- */
-var ADD_PLAYER_DESC = 'The order of players will be from top to bottom of this' +
-  ' list, skipping eliminated players';
-
-/**
  * Creates a UI for the player list. There should be only one instance per
  * html page.
  * 
@@ -42,14 +35,10 @@ drecco.sudokill.PlayerListUI = function(node) {
   this._addPlayerBtn = new goog.ui.Button('Add Player',
     goog.ui.FlatButtonRenderer.getInstance());
 
-  var playerTableDesc = goog.dom.createTextNode(ADD_PLAYER_DESC);
-  var playerTableDescDom = goog.dom.createDom('div', { id: 'add-player-desc',
-    'class': 'clear-float' }, playerTableDesc);
-
   this._playerTableDom = goog.dom.createDom('div', 'player-table');
 
   var fullGUIDom = goog.dom.createDom('div', { id: 'player-list' }, addPlayerInDom,
-    addPlayerDom, playerTableDescDom, this._playerTableDom);
+    addPlayerDom, this._playerTableDom);
 
   goog.dom.appendChild(node, fullGUIDom);
 
