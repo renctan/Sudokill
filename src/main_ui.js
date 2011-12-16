@@ -80,7 +80,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
       else {
         goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'New Game');
         thisRef._playerListUI.disable();
-        thisRef._createBoard(15);
+        thisRef._createBoard(60);
         thisRef._startGameBtn.setEnabled(false);
       }
 
