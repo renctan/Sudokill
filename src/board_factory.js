@@ -82,6 +82,10 @@ drecco.sudokill.BoardFactory.shuffleSector = function(board) {
   var sector = 0;
   var sectorX, sectorY, sectorStartX, sectorStartY, mappedStartX, mappedStartY;
   var xOffset, yOffset;
+  var doMirrorX = Math.random() > 0.5;
+  var doMirrorY = Math.random() > 0.5;
+  var doFlipXY = Math.random() > 0.5;
+  var targetX, targetY;
   
   for (sectorX = 0; sectorX < 3; sectorX++) {
     for (sectorY = 0; sectorY < 3; sectorY++) {
@@ -92,8 +96,25 @@ drecco.sudokill.BoardFactory.shuffleSector = function(board) {
 
       for (xOffset = 0; xOffset < 3; xOffset++) {
         for (yOffset = 0; yOffset < 3; yOffset++) {
-          newBoard.set(mappedStartX + xOffset, mappedStartY + yOffset,
-            board.get(sectorStartX + xOffset, sectorStartY + yOffset));
+          targetX = mappedStartX + xOffset;
+          targetY = mappedStartY + yOffset;
+
+          if (doMirrorX) {
+            targetX = 8 - targetX;
+          }
+
+          if (doMirrorY) {
+            targetY = 8 - targetY;
+          }
+
+          if (doFlipXY) {
+            newBoard.set(targetY, targetX,
+                         board.get(sectorStartX + xOffset, sectorStartY + yOffset));
+          }
+          else {
+            newBoard.set(targetX, targetY,
+                         board.get(sectorStartX + xOffset, sectorStartY + yOffset));
+          }
         }
       }
     }
