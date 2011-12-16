@@ -50,7 +50,7 @@
 }
 
 .simple-palette .goog-palette-table {
-  border: 1px solid #cccccc;
+  border: 2px solid black;
 }
 
 .simple-palette .goog-palette-cell {
@@ -75,5 +75,13 @@
   padding: 0;
   color: #00f;
   font-weight: bold;
+}
+
+.simple-palette .board-rborder {
+  border-right: 2px solid black;
+}
+
+.simple-palette .board-bborder {
+  border-bottom: 2px solid black;
 }
 

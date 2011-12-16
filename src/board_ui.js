@@ -17,34 +17,6 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.structs');
 
 /**
- * @private
- * @constant
- */
-var WIDTH_SIZE = 9;
-
-/**
- * @private
- * @constant
- */
-var LENGTH_SIZE = 9;
-
-/**
- * @private
- * @constant
- */
-var DIALOG_SELECTION_COL = 5;
-
-/**
- * @enum {string}
- * @private
- */
-var CLASS = {
-  BAD_CELL: 'board-bad-cell',
-  GOOD_CELL: 'board-good-cell',
-  OCCUPIED_CELL: 'board-occupied'
-};
-
-/**
  * Creates a UI container for Sudokill.
  * 
  * @param {number} filledCell The number of cells to fill on the initial board.
@@ -67,19 +39,19 @@ drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
   var boardPalette;
   var self = this;
 
-  for (y = 0; y < LENGTH_SIZE; y++) {
-    for (x = 0; x < WIDTH_SIZE; x++) {
+  for (y = 0; y < drecco.sudokill.BoardUI.LENGTH_SIZE; y++) {
+    for (x = 0; x < drecco.sudokill.BoardUI.WIDTH_SIZE; x++) {
       cell = this._board.get(x, y);
       items.push(goog.dom.createTextNode((cell == 0)? '' : cell.toString()));
     }
   }
 
   this._boardPalette = new goog.ui.Palette(items);
-  this._boardPalette.setSize(WIDTH_SIZE);
-
+  this._boardPalette.setSize(drecco.sudokill.BoardUI.WIDTH_SIZE);
   this._boardPalette.render(node);
-  goog.dom.classes.add(this._boardPalette.getElement(), 'simple-palette');
+  drecco.sudokill.BoardUI._decoratePalette(this._boardPalette);
 
+  goog.dom.classes.add(this._boardPalette.getElement(), 'simple-palette');
   goog.events.listen(this._boardPalette, goog.ui.Component.EventType.ACTION,
     function(e) { self._selectCell(e.target); }, false, this);
 
@@ -87,6 +59,36 @@ drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
 };
 
 goog.inherits(drecco.sudokill.BoardUI, goog.events.EventTarget);
+
+/**
+ * @type {number}
+ * @constant
+ */
+drecco.sudokill.BoardUI.WIDTH_SIZE = 9;
+
+/**
+ * @type {number}
+ * @constant
+ */
+drecco.sudokill.BoardUI.LENGTH_SIZE = 9;
+
+/**
+ * @type {number}
+ * @constant
+ */
+drecco.sudokill.BoardUI.DIALOG_SELECTION_COL = 5;
+
+/**
+ * @enum {string}
+ * @private
+ */
+drecco.sudokill.BoardUI.CLASS = {
+  BAD_CELL: 'board-bad-cell',
+  GOOD_CELL: 'board-good-cell',
+  OCCUPIED_CELL: 'board-occupied',
+  HAS_RIGHT_BORDER: 'board-rborder',
+  HAS_BOTTOM_BORDER: 'board-bborder'
+};
 
 /**
  * Handles the event when a cell is selected by the user.
@@ -112,7 +114,7 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
     paletteItems = goog.structs.map(validNumbers, function(number) {
       return goog.dom.createTextNode(String(number)); });
     /** @suppress {checkTypes} */ paletteInDlg = new goog.ui.Palette(paletteItems);
-    paletteInDlg.setSize(DIALOG_SELECTION_COL);
+    paletteInDlg.setSize(drecco.sudokill.BoardUI.DIALOG_SELECTION_COL);
     paletteInDlg.render(dialog.getContentElement());
     goog.dom.classes.add(paletteInDlg.getElement(), 'simple-palette');
 
@@ -169,7 +171,7 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
  * @private
  */
 drecco.sudokill.BoardUI._getX = function(num) {
-  return num % WIDTH_SIZE;
+  return num % drecco.sudokill.BoardUI.WIDTH_SIZE;
 };
 
 /**
@@ -177,7 +179,7 @@ drecco.sudokill.BoardUI._getX = function(num) {
  * @private
  */
 drecco.sudokill.BoardUI._getY = function(num) {
-  return Math.floor(num / WIDTH_SIZE);
+  return Math.floor(num / drecco.sudokill.BoardUI.WIDTH_SIZE);
 };
 
 /**
@@ -207,16 +209,17 @@ drecco.sudokill.BoardUI.renderEmptyBoard = function(node) {
   var boardPalette;
   var items = [];
   
-  for (y = 0; y < LENGTH_SIZE; y++) {
-    for (x = 0; x < WIDTH_SIZE; x++) {
+  for (y = 0; y < drecco.sudokill.BoardUI.LENGTH_SIZE; y++) {
+    for (x = 0; x < drecco.sudokill.BoardUI.WIDTH_SIZE; x++) {
       items.push(goog.dom.createTextNode(''));
     }
   }
 
   boardPalette = new goog.ui.Palette(items);
-  boardPalette.setSize(WIDTH_SIZE);
+  boardPalette.setSize(drecco.sudokill.BoardUI.WIDTH_SIZE);
 
   boardPalette.render(node);
+  drecco.sudokill.BoardUI._decoratePalette(boardPalette);
   goog.dom.classes.add(boardPalette.getElement(), 'simple-palette');
 };
 
@@ -228,6 +231,9 @@ drecco.sudokill.BoardUI.prototype.getSteps = function() {
 };
 
 /**
+ * Refreshes the display by marking X on cells that can't have any valid moves,
+ * graying out occupied cells and cells that are not valid moves.
+ * 
  * @private
  */
 drecco.sudokill.BoardUI.prototype._refreshDisplay = function() {
@@ -240,8 +246,8 @@ drecco.sudokill.BoardUI.prototype._refreshDisplay = function() {
   this._boardPalette.setEnabled(false);
   origSelectedIdx = this._boardPalette.getSelectedIndex();
 
-  for (; x < WIDTH_SIZE; x++) {
-    for (y = 0; y < LENGTH_SIZE; y++) {
+  for (; x < drecco.sudokill.BoardUI.WIDTH_SIZE; x++) {
+    for (y = 0; y < drecco.sudokill.BoardUI.LENGTH_SIZE; y++) {
       this._boardPalette.setSelectedIndex(drecco.sudokill.Board.calcOffset(x, y));
 
       selectedItem = this._boardPalette.getSelectedItem();
@@ -249,23 +255,69 @@ drecco.sudokill.BoardUI.prototype._refreshDisplay = function() {
       cell = selectedItem.parentNode;
 
       if (this._board.isOccupied(x, y)) {
-        goog.dom.classes.addRemove(cell, CLASS.GOOD_CELL, CLASS.OCCUPIED_CELL);
+        goog.dom.classes.addRemove(cell, drecco.sudokill.BoardUI.CLASS.GOOD_CELL,
+          drecco.sudokill.BoardUI.CLASS.OCCUPIED_CELL);
       }
       // TODO: possible optimization? Check if cell is already X?
       else if (this._board.getValidNumbers(x, y).isEmpty()) {
-        goog.dom.classes.addRemove(cell, CLASS.GOOD_CELL, CLASS.BAD_CELL);
+        goog.dom.classes.addRemove(cell, drecco.sudokill.BoardUI.CLASS.GOOD_CELL,
+          drecco.sudokill.BoardUI.CLASS.BAD_CELL);
         goog.dom.setTextContent(selectedItem, 'X');
       }
       else if(this._board.isAligned(x, y)) {
-        goog.dom.classes.addRemove(cell, CLASS.BAD_CELL, CLASS.GOOD_CELL);
+        goog.dom.classes.addRemove(cell, drecco.sudokill.BoardUI.CLASS.BAD_CELL,
+          drecco.sudokill.BoardUI.CLASS.GOOD_CELL);
       }
       else {
-        goog.dom.classes.addRemove(cell, CLASS.GOOD_CELL, CLASS.BAD_CELL);
+        goog.dom.classes.addRemove(cell, drecco.sudokill.BoardUI.CLASS.GOOD_CELL,
+          drecco.sudokill.BoardUI.CLASS.BAD_CELL);
       }
     }
   }
 
   this._boardPalette.setSelectedIndex(origSelectedIdx);
   this._boardPalette.setEnabled(true);
+};
+
+/**
+ * Decorates a palette with internal borders to partition the board into small
+ * 3x3 sectors.
+ * 
+ * @param {goog.ui.Palette} palette The palette to modify.
+ * @private
+ */
+drecco.sudokill.BoardUI._decoratePalette = function(palette) {
+  var x, y;
+  var cell;
+  var origSelectedIdx;
+  var selectedItem;
+
+  palette.setEnabled(false);
+  origSelectedIdx = palette.getSelectedIndex();
+
+  for (x = 2; x < drecco.sudokill.BoardUI.WIDTH_SIZE - 1; x += 3) {
+    for (y = 0; y < drecco.sudokill.BoardUI.LENGTH_SIZE; y++) {
+      palette.setSelectedIndex(drecco.sudokill.Board.calcOffset(x, y));
+
+      selectedItem = palette.getSelectedItem();
+      // getSelectedItem actually gives the text node so need to get the parent
+      cell = selectedItem.parentNode;
+      goog.dom.classes.add(cell, drecco.sudokill.BoardUI.CLASS.HAS_RIGHT_BORDER);
+    }
+  }
+
+  for (y = 2; y < drecco.sudokill.BoardUI.LENGTH_SIZE - 1; y += 3) {
+    for (x = 0; x < drecco.sudokill.BoardUI.WIDTH_SIZE; x++) {
+      palette.setSelectedIndex(drecco.sudokill.Board.calcOffset(x, y));
+
+      selectedItem = palette.getSelectedItem();
+      // getSelectedItem actually gives the text node so need to get the parent
+      cell = selectedItem.parentNode;
+      goog.dom.classes.add(cell, drecco.sudokill.BoardUI.CLASS.HAS_BOTTOM_BORDER);
+    }
+  }
+
+  palette.setSelectedIndex(origSelectedIdx);
+  palette.setEnabled(true);
 };
 
