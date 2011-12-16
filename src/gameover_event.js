@@ -11,7 +11,7 @@ goog.require('goog.events.Event');
  * Creates a new event with type @link{drecco.sudokill.EventType.GAME_OVER}.
  * 
  * @param {string} playerName The name of the winning player.
- * @param {Object|null|undefined} target The target of this event.
+ * @param {Object=} target The target of this event.
  * 
  * @constructor
  * @extends {goog.events.Event}

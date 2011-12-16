@@ -10,24 +10,6 @@ goog.require('drecco.sudokill.Move');
 goog.require('goog.structs.Set');
 
 /**
- * @type {number}
- * @constant
- */
-var BOARD_LENGTH = 9;
-
-/**
- * @type {number}
- * @constant
- */
-var BOARD_WIDTH = 9;
-
-/**
- * @type {number}
- * @constant
- */
-var MAX_VAL = 9;
-
-/**
  * Creates a new empty Sudoku board.
  * 
  * @constructor
@@ -46,14 +28,31 @@ drecco.sudokill.Board = function() {
 };
 
 /**
+ * @type {number}
+ * @constant
+ */
+drecco.sudokill.Board.BOARD_LENGTH = 9;
+
+/**
+ * @type {number}
+ * @constant
+ */
+drecco.sudokill.Board.BOARD_WIDTH = 9;
+
+/**
+ * @type {number}
+ * @constant
+ */
+drecco.sudokill.Board.MAX_VAL = 9;
+
+/**
  * @param {number} x
  * @param {number} y
  * 
  * @return {number} the offset of the 2D coordinates in 1D.
- * @private
  */
 drecco.sudokill.Board.calcOffset = function(x, y) {
-  return x + y * BOARD_WIDTH;
+  return x + y * drecco.sudokill.Board.BOARD_WIDTH;
 };
 
 /**
@@ -66,7 +65,8 @@ drecco.sudokill.Board.calcOffset = function(x, y) {
 drecco.sudokill.Board.prototype.set = function(x, y, n) {
   var success = true;
 
-  if (x >= BOARD_LENGTH || x < 0 || y >= BOARD_WIDTH || y < 0) {
+  if (x >= drecco.sudokill.Board.BOARD_LENGTH || x < 0 ||
+      y >= drecco.sudokill.Board.BOARD_WIDTH || y < 0) {
     success = false;
   }
   else {
@@ -105,7 +105,7 @@ drecco.sudokill.Board._validNumbers = function() {
   var numbers = new goog.structs.Set();
   var x = 1;
 
-  for (x = 1; x <= MAX_VAL; x++) {
+  for (x = 1; x <= drecco.sudokill.Board.MAX_VAL; x++) {
     numbers.add(x);
   }
   
@@ -122,7 +122,7 @@ drecco.sudokill.Board.prototype._validNumbersForRow = function(row) {
   var numbers = drecco.sudokill.Board._validNumbers();
   var x = 0;
 
-  for (; x < BOARD_WIDTH; x++) {
+  for (; x < drecco.sudokill.Board.BOARD_WIDTH; x++) {
     numbers.remove(this.get(x, row));
   }
   
@@ -138,7 +138,7 @@ drecco.sudokill.Board.prototype._validNumbersForColumn = function(column) {
   var numbers = drecco.sudokill.Board._validNumbers();
   var y = 0;
 
-  for (; y < BOARD_LENGTH; y++) {
+  for (; y < drecco.sudokill.Board.BOARD_LENGTH; y++) {
     numbers.remove(this.get(column, y));
   }
   
@@ -248,8 +248,8 @@ drecco.sudokill.Board.prototype.isAligned = function(x, y) {
  *   numbers.
  */
 drecco.sudokill.Board.prototype.rowColFilled = function(x, y) {
-  var i = BOARD_LENGTH;
-  var j = BOARD_WIDTH;
+  var i = drecco.sudokill.Board.BOARD_LENGTH;
+  var j = drecco.sudokill.Board.BOARD_WIDTH;
 
   for (; i--; ) {
     if (this.get(i, y) == 0) {
@@ -322,21 +322,21 @@ drecco.sudokill.Board.prototype.hasValidMoveAvailable = function() {
     lastX = lastMove.getX();
     lastY = lastMove.getY();
 
-    for (x = 0; x < BOARD_WIDTH; x++) {
+    for (x = 0; x < drecco.sudokill.Board.BOARD_WIDTH; x++) {
       if (this.canMakeMove(x, lastY)) {
         return true;
       }
     }
 
-    for (y = 0; y < BOARD_LENGTH; y++) {
+    for (y = 0; y < drecco.sudokill.Board.BOARD_LENGTH; y++) {
       if (this.canMakeMove(lastX, y)) {
         return true;
       }
     }
   }
   else {
-    for (x = 0; x < BOARD_WIDTH; x++) {
-      for (y = 0; y < BOARD_LENGTH; y++) {
+    for (x = 0; x < drecco.sudokill.Board.BOARD_WIDTH; x++) {
+      for (y = 0; y < drecco.sudokill.Board.BOARD_LENGTH; y++) {
         if (this.canMakeMove(x, y)) {
           return true;
         }

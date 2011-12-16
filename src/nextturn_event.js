@@ -11,7 +11,7 @@ goog.require('goog.events.Event');
  * Creates a new event with type @link{drecco.sudokill.EventType.NEXT_TURN}.
  * 
  * @param {drecco.sudokill.Player} player The player whose turn is next.
- * @param {Object|null|undefined} target The target of this event.
+ * @param {Object=} target The target of this event.
  * 
  * @constructor
  * @extends {goog.events.Event}

@@ -20,23 +20,11 @@ goog.require('goog.ui.Button');
 goog.require('goog.ui.FlatButtonRenderer');
 
 /**
- * @constant
- * @private
- */
-var ADD_PLAYER_MSG = 'Add at least 2 players then press start to begin.';
-
-/**
- * @constant
- * @private
- */
-var GAME_NAME = 'sudokilljs';
-
-/**
  * Creates the main UI component. This is intended to be used only on a single html
  * document.
  * 
  * @param {Node} node The <b>div<\b> element to attach this UI to.
- * @param {?Document} optDocRef The reference to the html document. This is used for
+ * @param {Document=} optDocRef The reference to the html document. This is used for
  *   sending the request to the server.
  * @constructor
  */
@@ -46,7 +34,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
   optDocRef = optDocRef || goog.dom.getOwnerDocument(node);
 
   this._statusBarDom = goog.dom.createDom('div', { id: 'status-bar' });
-  goog.dom.setTextContent(this._statusBarDom, ADD_PLAYER_MSG);
+  goog.dom.setTextContent(this._statusBarDom, drecco.sudokill.MainUI.ADD_PLAYER_MSG);
   goog.dom.appendChild(node, this._statusBarDom);
 
   this._gameState = null;
@@ -86,7 +74,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
         goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'Start Game');
         thisRef._playerListUI.enable();
         thisRef._disposeBoard();
-        goog.dom.setTextContent(thisRef._statusBarDom, ADD_PLAYER_MSG);
+        goog.dom.setTextContent(thisRef._statusBarDom, drecco.sudokill.MainUI.ADD_PLAYER_MSG);
         thisRef._saveScoreBtn.setEnabled(false);
       }
       else {
@@ -106,7 +94,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
   var handleSaveScore = function(e) {
     var thisRef = self;
     var query = new goog.Uri.QueryData();
-    query.add('task', GAME_NAME);
+    query.add('task', drecco.sudokill.MainUI.GAME_NAME);
     query.add('winner', thisRef.getWinner());
     query.add('ws', thisRef.getWinnerScore());
 
@@ -122,7 +110,19 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
 };
 
 /**
- * @param {drecco.sudokill.GameOverEvent}
+ * @constant
+ * @type {string}
+ */
+drecco.sudokill.MainUI.ADD_PLAYER_MSG = 'Add at least 2 players then press start to begin.';
+
+/**
+ * @constant
+ * @type {string}
+ */
+drecco.sudokill.MainUI.GAME_NAME = 'sudokilljs';
+
+/**
+ * @param {drecco.sudokill.GameOverEvent} e
  * @private
  */
 drecco.sudokill.MainUI.prototype._handleGameOver = function(e) {
@@ -134,7 +134,7 @@ drecco.sudokill.MainUI.prototype._handleGameOver = function(e) {
 };
 
 /**
- * @param {drecco.sudokill.NextTurnEvent}
+ * @param {drecco.sudokill.NextTurnEvent} e
  * @private
  */
 drecco.sudokill.MainUI.prototype._handleNextTurn = function(e) {

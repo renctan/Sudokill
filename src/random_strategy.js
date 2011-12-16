@@ -9,14 +9,15 @@ goog.require('drecco.sudokill.Move');
 
 /**
  * @param {drecco.sudokill.Board} board The current state of the board.
- * @param {boolean} followAlign Set to true if alignment to the last
+ * @param {boolean=} followAlign Set to true if alignment to the last
  *   move is required. Not yet implemented.
  * 
  * @return {drecco.sudokill.Move}
  */
 drecco.sudokill.RandomStrategy.makeMove = function(board, followAlign) {
   var doAlign = followAlign || false;
-  var x, y;
+  var x = 0;
+  var y = 0;
   var movesAvailable;
 
   while (true) {

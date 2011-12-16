@@ -49,7 +49,7 @@ var CLASS = {
  * 
  * @param {number} filledCell The number of cells to fill on the initial board.
  * @param {drecco.sudokill.PlayerList} playerList The list of players.
- * @param {Node} node The div node to attach this UI to.
+ * @param {Element} node The div node to attach this UI to.
  * 
  * @constructor
  * @extends {goog.events.EventTarget}
@@ -57,7 +57,7 @@ var CLASS = {
 drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
   goog.base(this);
 
-  this._board = new drecco.sudokill.BoardFactory.randBoard(filledCell);
+  this._board = drecco.sudokill.BoardFactory.randBoard(filledCell);
   this._isGameOver = false;
   this._players = playerList;
 
@@ -70,7 +70,7 @@ drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
   for (y = 0; y < LENGTH_SIZE; y++) {
     for (x = 0; x < WIDTH_SIZE; x++) {
       cell = this._board.get(x, y);
-      items.push(goog.dom.createTextNode((cell == 0)? '' : cell));
+      items.push(goog.dom.createTextNode((cell == 0)? '' : cell.toString()));
     }
   }
 
@@ -99,7 +99,7 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
   var x = drecco.sudokill.BoardUI._getX(idx);
   var y = drecco.sudokill.BoardUI._getY(idx);
   var validNumbers;
-  var paletteItems;
+  var paletteItems = [];
   var paletteInDlg;
   var dialog;
   var buttonSet;
@@ -111,7 +111,7 @@ drecco.sudokill.BoardUI.prototype._selectCell = function(palette) {
     validNumbers = this._board.getValidNumbers(x, y).getValues();
     paletteItems = goog.structs.map(validNumbers, function(number) {
       return goog.dom.createTextNode(String(number)); });
-    paletteInDlg = new goog.ui.Palette(paletteItems);
+    /** @suppress {checkTypes} */ paletteInDlg = new goog.ui.Palette(paletteItems);
     paletteInDlg.setSize(DIALOG_SELECTION_COL);
     paletteInDlg.render(dialog.getContentElement());
     goog.dom.classes.add(paletteInDlg.getElement(), 'simple-palette');

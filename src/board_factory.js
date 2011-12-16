@@ -14,8 +14,9 @@ goog.require('goog.structs.PriorityQueue');
  * 
  * @private
  * @constant
+ * @type {Array.<Array.<number>>}
  */
-var solvedBoard = [
+drecco.sudokill.BoardFactory.solvedBoard = [
   [
     [3, 5, 7, 8, 4, 1, 2, 6, 9],
     [1, 6, 8, 2, 9, 3, 5, 4, 7],
@@ -124,7 +125,8 @@ drecco.sudokill.BoardFactory.create = function(filledCells) {
     };
   }
   
-  board = solvedBoard[Math.floor(Math.random() * solvedBoard.length)];
+  board = drecco.sudokill.BoardFactory.solvedBoard[Math.floor(Math.random() *
+            drecco.sudokill.BoardFactory.solvedBoard.length)];
     
   for (x = 0; x < 9; x++) {
     for (y = 0; y < 9; y++) {

@@ -18,13 +18,36 @@ goog.require('goog.string');
  * @constructor
  */
 drecco.sudokill.Move = function(x, y, n) {
-  return {
-    getX: goog.functions.constant(x),
-    getY: goog.functions.constant(y),
-    getN: goog.functions.constant(n),
-    toString: function() {
-      return goog.string.buildString(n, '@(', x, ', ', y, ')');
-    }
-  };
+  this._x = x;
+  this._y = y;
+  this._n = n;
+};
+
+/**
+ * @return {number}
+ */
+drecco.sudokill.Move.prototype.getX = function() {
+  return this._x;
+};
+
+/**
+ * @return {number}
+ */
+drecco.sudokill.Move.prototype.getY = function() {
+  return this._y;
+};
+
+/**
+ * @return {number}
+ */
+drecco.sudokill.Move.prototype.getN = function() {
+  return this._n;
+};
+
+/**
+ * @return {string}
+ */
+drecco.sudokill.Move.prototype.toString = function() {
+  return goog.string.buildString(this._n, '@(', this._x, ', ', this._y, ')');
 };
 

@@ -68,7 +68,7 @@ drecco.sudokill.PlayerListUI.prototype._addPlayerHandler = function(e) {
     btnDom = goog.dom.createDom('div', 'player-list-entry-btngrp');
     newPlayerDom = goog.dom.createDom('div', 'player-list-entry', nameDom, btnDom);
 
-    rmBtn = new goog.ui.CustomButton();
+    rmBtn = new goog.ui.CustomButton(null);
     rmBtn.addClassName('player-list-icon');
     rmBtn.addClassName('player-list-rm');
     rmBtn.render(btnDom);
@@ -76,7 +76,7 @@ drecco.sudokill.PlayerListUI.prototype._addPlayerHandler = function(e) {
       goog.dom.removeNode(newPlayerDom);
     });
 
-    upBtn = new goog.ui.CustomButton();
+    upBtn = new goog.ui.CustomButton(null);
     upBtn.addClassName('player-list-icon');
     upBtn.addClassName('player-list-up');
     upBtn.render(btnDom);
@@ -89,7 +89,7 @@ drecco.sudokill.PlayerListUI.prototype._addPlayerHandler = function(e) {
       }
     });
 
-    downBtn = new goog.ui.CustomButton();
+    downBtn = new goog.ui.CustomButton(null);
     downBtn.addClassName('player-list-icon');
     downBtn.addClassName('player-list-down');
     downBtn.render(btnDom);
