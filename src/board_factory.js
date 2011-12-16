@@ -52,6 +52,56 @@ var solvedBoard = [
 ];
 
 /**
+ * Randomly shuffles the sectors of a Sudoko board while retaining the rule contraints.
+ * 
+ * @param {drecco.sudokill.Board} board The board to use as a basis for shuffling.
+ * 
+ * @return {drecco.sudokill.Board} a newly shuffled board.
+ */
+drecco.sudokill.BoardFactory.shuffleSector = function(board) {
+  var shuffledNumbers = function(count) {
+    var numbers = new goog.structs.PriorityQueue();
+    var x = 0;
+    var shuffled = [];
+
+    for (; x < count; x++) {
+      numbers.enqueue(Math.random(), x);
+    }
+
+    while (!numbers.isEmpty()) {
+      shuffled.push(numbers.dequeue());
+    }
+
+    return shuffled;
+  };
+
+  var newBoard = new drecco.sudokill.Board();
+  var horizontalMap = shuffledNumbers(3);
+  var verticalMap = shuffledNumbers(3);
+  var sector = 0;
+  var sectorX, sectorY, sectorStartX, sectorStartY, mappedStartX, mappedStartY;
+  var xOffset, yOffset;
+  
+  for (sectorX = 0; sectorX < 3; sectorX++) {
+    for (sectorY = 0; sectorY < 3; sectorY++) {
+      sectorStartX = sectorX * 3;
+      sectorStartY = sectorY * 3;
+      mappedStartX = horizontalMap[sectorX] * 3;
+      mappedStartY = verticalMap[sectorY] * 3;
+
+      for (xOffset = 0; xOffset < 3; xOffset++) {
+        for (yOffset = 0; yOffset < 3; yOffset++) {
+          newBoard.set(mappedStartX + xOffset, mappedStartY + yOffset,
+            board.get(sectorStartX + xOffset, sectorStartY + yOffset));
+        }
+      }
+    }
+  }
+
+  return newBoard;
+};
+
+/**
  * Creates a new Sudoku board with valid solution. 
  * 
  * @param {number} filledCells The number of cells to be filled.
@@ -88,6 +138,7 @@ drecco.sudokill.BoardFactory.create = function(filledCells) {
     newBoard.set(move.getX(), move.getY(), move.getN());
   }
 
+  newBoard = drecco.sudokill.BoardFactory.shuffleSector(newBoard);
   newBoard.forgetLastMove();
   newBoard.clearSteps();
 
