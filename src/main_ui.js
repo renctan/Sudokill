@@ -49,7 +49,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
   var filledCellSelectDom = goog.dom.createDom('span');
   var filledCellGroupDom = goog.dom.createDom('div', { id: 'filled-cell-group' },
     filledCellText, filledCellSelectDom);
-  var filledCellSelect = drecco.sudokill.MainUI._filledCellSelect(70, 50);
+  var filledCellSelect = drecco.sudokill.MainUI._filledCellSelect(75, 50);
   filledCellSelect.render(filledCellSelectDom);
 
   var gameSideBarDom = goog.dom.createDom('div', { 'id': 'sudokill-sidebar' });

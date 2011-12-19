@@ -182,7 +182,7 @@ drecco.sudokill.BoardFactory.create = function(filledCells) {
   board = drecco.sudokill.BoardFactory.solvedBoard[Math.floor(Math.random() *
             drecco.sudokill.BoardFactory.solvedBoard.length)];
     
-  for (x = 0; x < 9; x++) {
+   for (x = 0; x < 9; x++) {
     for (y = 0; y < 9; y++) {
       moves.enqueue(Math.random(), new drecco.sudokill.Move(x, y, board[x][y]));
     }
@@ -219,7 +219,7 @@ drecco.sudokill.BoardFactory.randBoard = function(filledCells) {
   var board;
   var newBoard = new drecco.sudokill.Board();
   var move;
-  var count;
+  var validCells = 81 - filledCells;
 
   if (filledCells > 81 || filledCells < 0) {
     throw {
@@ -228,7 +228,7 @@ drecco.sudokill.BoardFactory.randBoard = function(filledCells) {
     };
   }
 
-  for(count = 0; count < filledCells; count++) {
+  while(drecco.sudokill.BoardFactory._validCellCount(newBoard) > validCells) {
     move = drecco.sudokill.RandomStrategy.makeMove(newBoard);
     newBoard.set(move.getX(), move.getY(), move.getN());
   }
@@ -237,5 +237,27 @@ drecco.sudokill.BoardFactory.randBoard = function(filledCells) {
   newBoard.clearSteps();
 
   return newBoard;
+};
+
+/**
+ * Checks how many cells in the board where the player could make
+ * a valid move.
+ * 
+ * @param {drecco.sudokill.Board} board The board to check.
+ * @private
+ */
+drecco.sudokill.BoardFactory._validCellCount = function(board) {
+  var x, y;
+  var count = 0;
+
+  for (x = 0; x < 9; x++) {
+    for (y = 0; y < 9; y++) {
+      if (!board.isOccupied(x, y) && !board.getValidNumbers(x, y).isEmpty()) {
+        count++;
+      }
+    }
+  }
+  
+  return count;
 };
 

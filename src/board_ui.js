@@ -29,7 +29,7 @@ goog.require('goog.structs');
 drecco.sudokill.BoardUI = function(filledCell, playerList, node) {
   goog.base(this);
 
-  this._board = drecco.sudokill.BoardFactory.create(filledCell);
+  this._board = drecco.sudokill.BoardFactory.randBoard(filledCell);
   this._isGameOver = false;
   this._players = playerList;
 
