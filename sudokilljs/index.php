@@ -69,6 +69,10 @@
 
   <p>The order of players will be from top to bottom of this list. If a player gets eliminated, he will simply be skipped. You can modify the order of the list by clicking the up and down buttons right next to the player's name. You can also remove a player from the list by clicking on the x button. Once the game starts, modifying the list will not affect the game order.</p>
 
+  <h3>Initial board state</h3>
+
+  <p>You can select the number of cells that will be filled when the game starts by selecting the desired number from the drop down control beside the "initial filled cell".</p>
+
   <h3>Playing the actual game</h3>
 
   <p>To start playing, just press the start game button once there are at least two players. The grey cells indicate cells that you cannot place a move on while a beige means the cell is playable. A cell will also be marked with an 'X' if there are no legal moves available for that cell.</p>
