@@ -18,6 +18,8 @@ goog.require('goog.events.EventType');
 goog.require('goog.ui.Dialog');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.FlatButtonRenderer');
+goog.require('goog.ui.Select');
+goog.require('goog.ui.MenuItem');
 
 /**
  * Creates the main UI component. This is intended to be used only on a single html
@@ -43,6 +45,13 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
 
   drecco.sudokill.BoardUI.renderEmptyBoard(this._boardDom);
 
+  var filledCellText = goog.dom.createTextNode('Initial filled cells: ');
+  var filledCellSelectDom = goog.dom.createDom('span');
+  var filledCellGroupDom = goog.dom.createDom('div', { id: 'filled-cell-group' },
+    filledCellText, filledCellSelectDom);
+  var filledCellSelect = drecco.sudokill.MainUI._filledCellSelect(70, 50);
+  filledCellSelect.render(filledCellSelectDom);
+
   var gameSideBarDom = goog.dom.createDom('div', { 'id': 'sudokill-sidebar' });
   this._playerListUI = new drecco.sudokill.PlayerListUI(gameSideBarDom);
 
@@ -50,6 +59,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
   this._startGameBtn = new goog.ui.Button('Start Game',
     goog.ui.FlatButtonRenderer.getInstance());
   this._startGameBtn.render(startGameDom);
+  goog.dom.appendChild(gameSideBarDom, filledCellGroupDom);
   goog.dom.appendChild(gameSideBarDom, startGameDom);
 
   var boardAndSideDom = goog.dom.createDom('div', { id: 'board-and-sidebar' },
@@ -80,7 +90,7 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
       else {
         goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'New Game');
         thisRef._playerListUI.disable();
-        thisRef._createBoard(60);
+        thisRef._createBoard(filledCellSelect.getSelectedIndex());
         thisRef._startGameBtn.setEnabled(false);
       }
 
@@ -205,5 +215,27 @@ drecco.sudokill.MainUI.prototype.getWinner = function() {
  */
 drecco.sudokill.MainUI.prototype.getWinnerScore = function() {
   return this._gameState.getSteps() + 'steps';
+};
+
+/**
+ * Creates a drop down select control that contains numbers from 0 to
+ * the specified maximum number.
+ * 
+ * @param {number} max The maximum number.
+ * @param {number} defval The default value for the select control.
+ * @private
+ */
+drecco.sudokill.MainUI._filledCellSelect = function(max, defVal) {
+  var select = new goog.ui.Select();
+  var x;
+
+  for (x = 0; x <= max; x++) {
+    select.addItem(new goog.ui.MenuItem(x.toString()));
+  }
+
+  select.setSelectedIndex(defVal);
+  select.setScrollOnOverflow(true);
+
+  return select;
 };
 

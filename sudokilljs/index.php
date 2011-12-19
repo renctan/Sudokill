@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="games/sudokilljs/css/sudokill.css">
   <link rel="stylesheet" href="games/sudokilljs/css/player_list.css">
   <link rel="stylesheet" href="games/sudokilljs/css/flatbutton.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/menubutton.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/menu.css">
+  <link rel="stylesheet" href="games/sudokilljs/css/menuitem.css">
 </head>
 
 <body>
