@@ -222,11 +222,11 @@ drecco.sudokill.MainUI.prototype.getWinnerScore = function() {
  * the specified maximum number.
  * 
  * @param {number} max The maximum number.
- * @param {number} defval The default value for the select control.
+ * @param {number} defVal The default value for the select control.
  * @private
  */
 drecco.sudokill.MainUI._filledCellSelect = function(max, defVal) {
-  var select = new goog.ui.Select();
+  var select = new goog.ui.Select(null);
   var x;
 
   for (x = 0; x <= max; x++) {

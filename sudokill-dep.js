@@ -7,7 +7,7 @@ goog.addDependency('../../src/drecco_bootstrap.js', ['drecco.sudokill.Bootstrap'
 goog.addDependency('../../src/elim_event.js', ['drecco.sudokill.EliminatedEvent'], ['drecco.sudokill.EventType', 'goog.events.Event']);
 goog.addDependency('../../src/event_type.js', ['drecco.sudokill.EventType'], ['goog.events']);
 goog.addDependency('../../src/gameover_event.js', ['drecco.sudokill.GameOverEvent'], ['drecco.sudokill.EventType', 'goog.events.Event']);
-goog.addDependency('../../src/main_ui.js', ['drecco.sudokill.MainUI'], ['drecco.sudokill.BoardUI', 'drecco.sudokill.EventType', 'drecco.sudokill.PlayerListUI', 'goog.Uri', 'goog.dom', 'goog.events', 'goog.events.EventType', 'goog.string', 'goog.string.StringBuffer', 'goog.ui.Button', 'goog.ui.Dialog', 'goog.ui.FlatButtonRenderer']);
+goog.addDependency('../../src/main_ui.js', ['drecco.sudokill.MainUI'], ['drecco.sudokill.BoardUI', 'drecco.sudokill.EventType', 'drecco.sudokill.PlayerListUI', 'goog.Uri', 'goog.dom', 'goog.events', 'goog.events.EventType', 'goog.string', 'goog.string.StringBuffer', 'goog.ui.Button', 'goog.ui.Dialog', 'goog.ui.FlatButtonRenderer', 'goog.ui.MenuItem', 'goog.ui.Select']);
 goog.addDependency('../../src/move.js', ['drecco.sudokill.Move'], ['goog.functions', 'goog.string']);
 goog.addDependency('../../src/nextturn_event.js', ['drecco.sudokill.NextTurnEvent'], ['drecco.sudokill.EventType', 'goog.events.Event']);
 goog.addDependency('../../src/player.js', ['drecco.sudokill.Player'], []);
