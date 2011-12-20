@@ -90,7 +90,8 @@ drecco.sudokill.MainUI = function(node, optDocRef) {
       else {
         goog.dom.setTextContent(thisRef._startGameBtn.getElement(), 'New Game');
         thisRef._playerListUI.disable();
-        thisRef._createBoard(filledCellSelect.getSelectedIndex());
+        thisRef._createBoard(filledCellSelect.getSelectedIndex() *
+          drecco.sudokill.MainUI.FILL_CELL_INTERVAL);
         thisRef._startGameBtn.setEnabled(false);
       }
 
@@ -130,6 +131,12 @@ drecco.sudokill.MainUI.ADD_PLAYER_MSG = 'Add at least 2 players then press start
  * @type {string}
  */
 drecco.sudokill.MainUI.GAME_NAME = 'sudokilljs';
+
+/**
+ * @constant
+ * @type {number}
+ */
+drecco.sudokill.MainUI.FILL_CELL_INTERVAL = 10;
 
 /**
  * @param {drecco.sudokill.GameOverEvent} e
@@ -229,11 +236,11 @@ drecco.sudokill.MainUI._filledCellSelect = function(max, defVal) {
   var select = new goog.ui.Select(null);
   var x;
 
-  for (x = 0; x <= max; x++) {
+  for (x = 0; x <= max; x += drecco.sudokill.MainUI.FILL_CELL_INTERVAL) {
     select.addItem(new goog.ui.MenuItem(x.toString()));
   }
 
-  select.setSelectedIndex(defVal);
+  select.setSelectedIndex(defVal / drecco.sudokill.MainUI.FILL_CELL_INTERVAL);
   select.setScrollOnOverflow(true);
 
   return select;
